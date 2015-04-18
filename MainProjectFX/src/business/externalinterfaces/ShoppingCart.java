@@ -14,5 +14,4 @@ public interface ShoppingCart {
     boolean isEmpty();
 
     //setters for testing
-    
 }

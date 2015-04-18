@@ -63,7 +63,7 @@ class ShoppingCartImpl implements ShoppingCart {
         billAddress = addr;
     }
     
-    void setPaymentInfo(CreditCard cc) {
+    public void setPaymentInfo(CreditCard cc) {
         creditCard = cc;
     }
 
@@ -108,7 +108,5 @@ class ShoppingCartImpl implements ShoppingCart {
         }
     	return sum;
     }
-    
-    
  
 }

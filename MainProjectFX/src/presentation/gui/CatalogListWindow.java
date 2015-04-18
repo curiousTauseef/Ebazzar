@@ -1,10 +1,5 @@
 package presentation.gui;
 
-import java.util.List;
-
-import presentation.control.BrowseSelectUIControl;
-import presentation.data.CatalogPres;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,6 +13,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import presentation.control.BrowseSelectUIControl;
+import presentation.data.CatalogPres;
 
 public class CatalogListWindow extends Stage implements MessageableWindow, ModifiableTableWindow {
 	//These lines of code make CatalogListWindow a singleton -- singleton implementation

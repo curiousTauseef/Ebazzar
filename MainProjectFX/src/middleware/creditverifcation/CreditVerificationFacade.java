@@ -19,9 +19,7 @@ public class CreditVerificationFacade implements CreditVerification {
 	 * @param amount
 	 */
 	@Override
-	public void checkCreditCard(CustomerProfile custProfile,
-			Address billingAddress, CreditCard creditCard, double amount)
-			throws MiddlewareException {
+	public void checkCreditCard(CustomerProfile custProfile,Address billingAddress, CreditCard creditCard, double amount) throws MiddlewareException {
 		
 		IVerificationSystem verifSystem = VerificationManager.clientInterface();
 		CreditVerifMediator mediator = new CreditVerifMediator();

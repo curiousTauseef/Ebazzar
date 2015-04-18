@@ -10,8 +10,7 @@ public class AddressImpl implements Address {
 	private boolean isShippingAddress = false;
 	private boolean isBillingAddress = false;
 	
-	public AddressImpl(String str, String c, String state, String zip, 
-			boolean isShip, boolean isBill) {
+	public AddressImpl(String str, String c, String state, String zip, 	boolean isShip, boolean isBill) {
 		street=str;
 		city=c;
 		this.state=state;

@@ -71,7 +71,6 @@ public class OrderSubsystemFacade implements OrderSubsystem {
 	}
 
 
-
 	@Override
 	public void submitOrder(ShoppingCart shopCart) throws BackendException {
 		try {

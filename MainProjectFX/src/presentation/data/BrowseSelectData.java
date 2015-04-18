@@ -5,10 +5,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import business.BusinessConstants;
 import business.CartItemData;
+import business.SessionCache;
 import business.Util;
 import business.exceptions.BackendException;
 import business.externalinterfaces.*;
+import business.ordersubsystem.OrderImpl;
+import business.ordersubsystem.OrderSubsystemFacade;
+import business.productsubsystem.ProductSubsystemFacade;
 import business.usecasecontrol.BrowseAndSelectController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -112,10 +117,25 @@ public enum BrowseSelectData  {
 	//CatalogList data
 	public List<CatalogPres> getCatalogList() throws BackendException {
 		
-		return BrowseAndSelectController.INSTANCE.getCatalogs()
+		/*return BrowseAndSelectController.INSTANCE.getCatalogs()
 		    .stream()
 		    .map(catalog -> Util.catalogToCatalogPres(catalog))
-		    .collect(Collectors.toList());
+		    .collect(Collectors.toList());*/
+		
+		try {
+			ProductSubsystem productSub = new ProductSubsystemFacade();
+			List<Catalog> catalogs = productSub.getCatalogList();
+			List<CatalogPres> catalogPresList = new ArrayList<CatalogPres>();
+			for (int i = 0 ; i <catalogs.size(); i++) {
+				CatalogPres orderPres = new CatalogPres();
+				orderPres.setCatalog(catalogs.get(i));
+				catalogPresList.add(orderPres);
+			}
+			return catalogPresList;
+		} catch (BackendException e) {
+			e.printStackTrace();
+			return null;
+		}
 		
 	}
 	

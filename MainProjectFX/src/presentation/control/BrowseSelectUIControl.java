@@ -20,6 +20,8 @@ import presentation.gui.ProductDetailsWindow;
 import presentation.gui.ProductListWindow;
 import presentation.gui.ShoppingCartWindow;
 import presentation.gui.TableUtil;
+import business.BusinessConstants;
+import business.SessionCache;
 import business.exceptions.BackendException;
 //import rulesengine.OperatingException;
 //import rulesengine.ReteWrapper;
@@ -30,7 +32,10 @@ import business.exceptions.BackendException;
 import business.exceptions.BusinessException;
 import business.exceptions.RuleException;
 import business.exceptions.UnauthorizedException;
+import business.externalinterfaces.CustomerProfile;
+import business.externalinterfaces.CustomerSubsystem;
 import business.externalinterfaces.Product;
+import business.externalinterfaces.ShoppingCart;
 import business.externalinterfaces.ShoppingCartSubsystem;
 import business.shoppingcartsubsystem.ShoppingCartSubsystemFacade;
 import business.usecasecontrol.BrowseAndSelectController;
@@ -240,9 +245,7 @@ public enum BrowseSelectUIControl {
 	}
 	
 	//////////// Handlers for ShoppingCartWindow 
-	
 	private class CartContinueHandler implements EventHandler<ActionEvent> {
-		
 		@Override
 		public void handle(ActionEvent arg0) {
 			try {
@@ -264,7 +267,19 @@ public enum BrowseSelectUIControl {
 		
 		@Override
 		public void handle(ActionEvent evt) {
-			shoppingCartWindow.displayInfo("You need to implement this handler.");	
+			//shoppingCartWindow.displayInfo("You need to implement this handler.");
+			SessionCache cache = SessionCache.getInstance();
+			CustomerSubsystem customerSub = (CustomerSubsystem) cache.get(BusinessConstants.CUSTOMER);
+			ShoppingCartSubsystem sc = ShoppingCartSubsystemFacade.INSTANCE;
+			sc.setCustomerProfile(customerSub.getCustomerProfile());
+			try {
+				sc.saveLiveCart();
+				shoppingCartWindow.displayInfo("Cart saved successfully.");
+				shoppingCartWindow.show();
+			} catch (BackendException e) {
+				e.printStackTrace();
+			}
+			
 		}	
 	}
 	public SaveCartHandler getSaveCartHandler() {
