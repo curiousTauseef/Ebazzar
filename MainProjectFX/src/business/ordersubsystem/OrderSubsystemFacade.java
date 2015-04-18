@@ -1,13 +1,16 @@
 package business.ordersubsystem;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import middleware.exceptions.DatabaseException;
+import business.exceptions.BackendException;
 import business.externalinterfaces.CustomerProfile;
 import business.externalinterfaces.Order;
 import business.externalinterfaces.OrderItem;
 import business.externalinterfaces.OrderSubsystem;
+import business.externalinterfaces.ShoppingCart;
 
 public class OrderSubsystemFacade implements OrderSubsystem {
 	private static final Logger LOG = 
@@ -46,4 +49,37 @@ public class OrderSubsystemFacade implements OrderSubsystem {
     	DbClassOrder dbClass = new DbClassOrder();
     	return dbClass.getOrderData(orderId);
     }
+
+
+
+	@Override
+	public List<Order> getOrderHistory() throws BackendException {
+		try {
+			DbClassOrder dbClass = new DbClassOrder();
+			List<Order> orders = new ArrayList<Order>();
+	        List<Integer> orderIds = dbClass.getAllOrderIds(custProfile);
+	        for (int orderId : orderIds) {
+	        	List<OrderItem> orderItems = dbClass.getOrderItems(orderId);
+	        	OrderImpl order = dbClass.getOrderData(orderId);
+	        	order.setOrderItems(orderItems);
+	        	orders.add(order);
+	        }
+	        return orders;
+		} catch (DatabaseException e) {
+			throw new BackendException(e);
+		}
+	}
+
+
+
+	@Override
+	public void submitOrder(ShoppingCart shopCart) throws BackendException {
+		try {
+			DbClassOrder dbClass = new DbClassOrder();
+			dbClass.submitOrder(shopCart);
+		} catch (DatabaseException e) {
+			throw new BackendException(e);
+		}
+		
+	}
 }

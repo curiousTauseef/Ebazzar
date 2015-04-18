@@ -3,6 +3,9 @@ package business.ordersubsystem;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,6 +18,7 @@ import middleware.externalinterfaces.DataAccessSubsystem;
 import middleware.externalinterfaces.DbClass;
 import middleware.externalinterfaces.DbConfigKey;
 import business.externalinterfaces.Address;
+import business.externalinterfaces.CartItem;
 import business.externalinterfaces.CreditCard;
 import business.externalinterfaces.CustomerProfile;
 import business.externalinterfaces.Order;
@@ -78,7 +82,27 @@ class DbClassOrder implements DbClass {
     
     // Precondition: CustomerProfile has been set by the constructor
     void submitOrder(ShoppingCart shopCart) throws DatabaseException {
-    	//implement
+    	//implement DatTX
+    	try {
+	    	orderData = new OrderImpl();
+	    	orderData.setDate(LocalDate.now());
+	    	orderItems = new ArrayList<OrderItem>();
+	    	for (int i = 0 ; i < shopCart.getCartItems().size(); i++) {
+	    		CartItem cartItem = shopCart.getCartItems().get(i);
+				OrderItem item = new OrderItemImpl(cartItem.getProductName(),
+						Integer.parseInt(cartItem.getQuantity()),
+						Double.parseDouble(cartItem.getTotalprice())
+								/ Integer.parseInt(cartItem.getQuantity()));
+				orderItems.add(item);
+				submitOrderItem(item);
+	    	}
+	    	orderData.setOrderItems(orderItems);
+	    	order = orderData;
+	    	submitOrderData();
+    	} catch (DatabaseException e) {
+    		dataAccessSS.rollback();
+    		throw e;
+    	}
     }
 	    
     
@@ -147,24 +171,48 @@ class DbClassOrder implements DbClass {
     }
 	
     private void buildSaveOrderItemQuery(){
-    	//implement
-        query = "";
+    	//implement DatTX
+        query = "INSERT INTO AccountsDb.OrderItem "+
+        		"(orderitemid, orderid, productid, quantity, totalprice, shipmentcost, taxamount) " +
+        		"VALUES(null, " + orderItem.getOrderId() + ",'" +
+        		orderItem.getProductId() + "','" +
+        		orderItem.getQuantity() + "','" +
+        		orderItem.getTotalPrice() + "','" +
+        		0 + "','" +
+        		0 + "')";
     }
 
     private void buildGetOrderDataQuery() {
-        query = "SELECT orderdate, totalpriceamount FROM Ord WHERE orderid = " + orderId;     
+        query = "SELECT orderdate, totalpriceamount FROM AccountsDb.Ord WHERE orderid = " + orderId;     
     }
     
     private void buildGetOrderIdsQuery() {
-        query = "SELECT orderid FROM Ord WHERE custid = "+custProfile.getCustId();     
+        query = "SELECT orderid FROM AccountsDb.Ord WHERE custid = "+custProfile.getCustId();     
     }
     
     private void buildGetOrderItemsQuery() {
-        query = "SELECT * FROM OrderItem WHERE orderid = "+orderId; 
+        query = "SELECT ProductsDb.product.productname, "
+        		+ "ProductsDb.product.priceperunit as unitprice, "
+        		+ "AccountsDb.orderItem.quantity "
+        		+ "from AccountsDb.OrderItem INNER JOIN ProductsDb.Product " 
+        		+ "where ProductsDb.Product.productid = AccountsDb.orderitem.productid "
+        		+ "and AccountsDb.OrderItem.orderid = " + orderId; 
     }
     
     private void populateOrderItems(ResultSet rs) throws DatabaseException {
-       //implement
+       //implement DatTX
+    	orderItems = new LinkedList<OrderItem>();
+    	try {
+    		while (rs.next()) {
+    			String name = rs.getString("productname");
+    			int quantity = rs.getInt("quantity");
+    			double price = rs.getDouble("unitprice");
+    			OrderItemImpl item = new OrderItemImpl(name, quantity, price);
+    			orderItems.add(item);
+    		}
+    	} catch (SQLException e) {
+    		throw new DatabaseException(e);
+    	}
     }
     
     private void populateOrderIds(ResultSet resultSet) throws DatabaseException {
@@ -180,7 +228,21 @@ class DbClassOrder implements DbClass {
     }
     
     private void populateOrderData(ResultSet resultSet) throws DatabaseException {  	
-        //implement
+        //implement DatTX
+    	orderData = new OrderImpl();
+        try {
+            while(resultSet.next()){
+//            	LocalDate date = resultSet.getDate("orderdate").toLocalDate();
+            	String dateString = resultSet.getString("orderdate");
+            	LocalDate localDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+            	String amount = resultSet.getString("totalpriceamount");
+            	orderData.setDate(localDate);
+            	orderData.setOrderId(orderId);
+            }
+        }
+        catch(SQLException e){
+            throw new DatabaseException(e);
+        }
     }    
  
     public void populateEntity(ResultSet resultSet) throws DatabaseException {
