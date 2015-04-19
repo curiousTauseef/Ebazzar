@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import middleware.exceptions.DatabaseException;
+import business.customersubsystem.CustomerSubsystemFacade;
+import business.customersubsystem.DbClassAddress;
 import business.exceptions.BackendException;
 import business.exceptions.BusinessException;
 import business.exceptions.RuleException;
@@ -13,6 +15,7 @@ import business.externalinterfaces.Address;
 import business.externalinterfaces.CartItem;
 import business.externalinterfaces.CreditCard;
 import business.externalinterfaces.CustomerProfile;
+import business.externalinterfaces.CustomerSubsystem;
 import business.externalinterfaces.Rules;
 import business.externalinterfaces.ShoppingCart;
 import business.externalinterfaces.ShoppingCartSubsystem;
@@ -38,6 +41,7 @@ public enum ShoppingCartSubsystemFacade implements ShoppingCartSubsystem {
 	public ShoppingCart getLiveCart() {
 		return liveCart;
 	}
+	
 	
 
 	public void retrieveSavedCart() throws BackendException {
@@ -83,6 +87,52 @@ public enum ShoppingCartSubsystemFacade implements ShoppingCartSubsystem {
 	
 	public CartItem getEmptyCartItemForTest() {
 		return new CartItemImpl();
+	}
+
+	@Override
+	public void setShippingAddress(Address addr) {
+		// TODO Auto-generated method stub
+		liveCart.setShipAddress(addr);
+		
+	}
+
+	@Override
+	public void setBillingAddress(Address addr) {
+		// TODO Auto-generated method stub
+		liveCart.setBillAddress(addr);
+		
+	}
+
+	@Override
+	public void setPaymentInfo(CreditCard cc) {
+		// TODO Auto-generated method stub
+		liveCart.setPaymentInfo(cc);
+		
+	}
+
+	@Override
+	public List<CartItem> getLiveCartItems() {
+		// TODO Auto-generated method stub
+		return liveCart.getCartItems();
+	}
+
+	@Override
+	public void saveLiveCart() throws BackendException {
+		// TODO Auto-generated method stub
+		try {
+            DbClassShoppingCart dbclass = new DbClassShoppingCart();
+            CustomerSubsystem custSubsystem = new CustomerSubsystemFacade();
+            custSubsystem.setCustomerProfile(customerProfile);
+            custSubsystem.loadDefaultCustomerData();
+            liveCart.setBillAddress(custSubsystem.getDefaultBillingAddress());
+            liveCart.setShipAddress(custSubsystem.getDefaultBillingAddress());
+            liveCart.setPaymentInfo(custSubsystem.getDefaultPaymentInfo());
+            dbclass.saveCart(customerProfile, liveCart);
+        } catch(DatabaseException ex)  {
+            throw new BackendException(ex);
+
+        }
+		
 	}
 
 }

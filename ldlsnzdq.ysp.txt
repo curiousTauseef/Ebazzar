@@ -1,0 +1,16 @@
+﻿
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch customer_subsystem
+# Your branch is up-to-date with 'origin/customer_subsystem'.
+#
+# Changes to be committed:
+#	modified:   MainProjectFX/src/business/Util.java
+#	modified:   MainProjectFX/src/business/customersubsystem/CustomerSubsystemFacade.java
+#	modified:   MainProjectFX/src/business/ordersubsystem/OrderSubsystemFacade.java
+#	modified:   MainProjectFX/src/business/usecasecontrol/ManageProductsController.java
+#	modified:   MainProjectFX/src/presentation/data/BrowseSelectData.java
+#	modified:   MainProjectFX/src/presentation/data/OrderPres.java
+#	modified:   MainProjectFX/src/presentation/data/ViewOrdersData.java
+#
+

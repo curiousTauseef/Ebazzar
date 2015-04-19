@@ -46,24 +46,24 @@ public interface ShoppingCartSubsystem {
 //	/**Used to display items currently in live shopping cart (for instance, when an item is added to cart
 //	 * and the CartItemsWindow is about to be displayed). the method returns the list of cart items currently
 //	 * stored in the live cart, sitting in the shopping cart subsystem facade */
-//	public List<CartItem> getLiveCartItems();
+	public List<CartItem> getLiveCartItems();
 //	
 //	/**
 //	 * Accessor used by customer subsystem to store user's selected ship address during checkout;
 //	 * stores value in shop cart facade 
 //	 */
-//	public void setShippingAddress(Address addr);
+	public void setShippingAddress(Address addr);
 //	
 //	/**
 //	 * Accessor used by customer subsystem to store user's selected ship address during checkout;
 //	 * stores value in shop cart facade 
 //	 */
-//	public void setBillingAddress(Address addr);
+	public void setBillingAddress(Address addr);
 //	/**
 //	 * Accessor used by customer subsystem to store user's selected ship address during checkout;
 //	 * stores value in shop cart facade 
 //	 */
-//	public void setPaymentInfo(CreditCard cc);
+	public void setPaymentInfo(CreditCard cc);
 //	
 //	
 //	
@@ -75,7 +75,7 @@ public interface ShoppingCartSubsystem {
 //	public void makeSavedCartLive();
 //
 //	/** used when user selects the "Save Cart" option on the cart items window */
-//	public void saveLiveCart() throws BackendException;
+	public void saveLiveCart() throws BackendException;
 //
 //      /**
 //       *  Used when a user enters Checkout use case by

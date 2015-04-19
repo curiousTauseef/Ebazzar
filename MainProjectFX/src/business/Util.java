@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import presentation.data.CartItemPres;
 import presentation.data.CatalogPres;
+import presentation.data.OrderPres;
 import presentation.data.ProductPres;
 import business.externalinterfaces.*;
 import business.shoppingcartsubsystem.ShoppingCartSubsystemFacade;
@@ -57,5 +58,21 @@ public class Util {
 				.map(c -> {CartItemPres p = new CartItemPres(); p.setCartItem(c); return p;})
 				.collect(Collectors.toList());
 		
+	}
+	
+	public static List<OrderPres> orderListToOrderPresList(List<Order> list) {
+		if(list == null) return null;
+		return list.stream().map(ord -> {OrderPres op = new OrderPres();
+		                         op.setOrder(ord); return op;})
+					  .collect(Collectors.toList());
+				
+	}
+	
+	public static List<CatalogPres> catalogListToCatalogPresList(List<Catalog> list) {
+		if(list == null) return null;
+		return list.stream().map(catalog -> {CatalogPres catalogPres = new CatalogPres();
+						catalogPres.setCatalog(catalog); return catalogPres;})
+					  .collect(Collectors.toList());
+				
 	}
 }

@@ -17,7 +17,7 @@ import business.externalinterfaces.Address;
 import business.externalinterfaces.CustomerProfile;
 import business.externalinterfaces.DbClassAddressForTest;
 
-class DbClassAddress implements DbClass, DbClassAddressForTest {
+public class DbClassAddress implements DbClass, DbClassAddressForTest {
 	private static final Logger LOG = Logger.getLogger(DbClassAddress.class.getPackage().getName());
 	private DataAccessSubsystem dataAccessSS = new DataAccessSubsystemFacade();
     private CustomerProfile custProfile;
@@ -78,13 +78,22 @@ class DbClassAddress implements DbClass, DbClassAddressForTest {
     }
 	
     void readDefaultShipAddress(CustomerProfile custProfile) throws DatabaseException {
-    	//implement     
+    	//implemented by waqas
+    	this.custProfile = custProfile;
+        queryType=READ_DEFAULT_SHIP;
+        dataAccessSS.atomicRead(this);
     }
     void readDefaultBillAddress(CustomerProfile custProfile) throws DatabaseException {
-    	//implement
+    	//implemented by waqas
+    	this.custProfile = custProfile;
+        queryType=READ_DEFAULT_BILL;
+        dataAccessSS.atomicRead(this); 
     }    
     public void readAllAddresses(CustomerProfile custProfile) throws DatabaseException {
-    	//implement         
+    	//implemented by waqas         
+    	this.custProfile = custProfile;
+        queryType = READ;
+        dataAccessSS.atomicRead(this);    
     }
     
         
@@ -98,7 +107,7 @@ class DbClassAddress implements DbClass, DbClassAddressForTest {
     }
 	
     void buildSaveNewAddrQuery() throws DatabaseException {
-        query = "INSERT into altaddress " +
+        query = "INSERT into altshipaddress " +
         		"(addressid,custid,street,city,state,zip) " +
         		"VALUES(NULL," +
         				  custProfile.getCustId() + ",'" +
@@ -108,8 +117,7 @@ class DbClassAddress implements DbClass, DbClassAddressForTest {
         				  address.getZip() + "')";
     }
     void buildReadAllAddressesQuery() {
-    	//IMPLEMENT -- change custid = 1 to a valid custid 
-        query = "SELECT * from altaddress WHERE custid = 1";
+        query = "SELECT * from altshipaddress WHERE custid = 1";
     }
     void buildReadDefaultBillQuery() {
         query = "SELECT billaddress1, billaddress2, billcity, billstate, billzipcode " +
@@ -152,10 +160,38 @@ class DbClassAddress implements DbClass, DbClassAddressForTest {
     
     void populateDefaultShipAddress(ResultSet rs) throws DatabaseException {
        //implement
+    	
+    	try {
+            if(rs.next()){
+                defaultShipAddress = new AddressImpl(rs.getString("shipaddress1"),
+                                                 rs.getString("shipcity"),
+                                                 rs.getString("shipstate"),
+                                                 rs.getString("shipzipcode"),
+                                                 true,
+                                                 false);
+            }          
+        }
+        catch(SQLException e) {
+            throw new DatabaseException(e);
+        }
+    	 
         
     }
     void populateDefaultBillAddress(ResultSet rs) throws DatabaseException {
         //implement    
+    	 try {
+             if(rs.next()){
+                 defaultBillAddress = new AddressImpl(rs.getString("billaddress1"),
+                                                  rs.getString("billcity"),
+                                                  rs.getString("billstate"),
+                                                  rs.getString("billzipcode"),
+                                                  false,
+                                                  true);
+             }          
+         }
+         catch(SQLException e) {
+             throw new DatabaseException(e);
+         }
     }
 	
 	
