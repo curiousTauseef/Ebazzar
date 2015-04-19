@@ -54,9 +54,9 @@ public class OrderSubsystemFacade implements OrderSubsystem {
 
 	@Override
 	public List<Order> getOrderHistory() throws BackendException {
+		DbClassOrder dbClass = new DbClassOrder();
+		List<Order> orders = new ArrayList<Order>();
 		try {
-			DbClassOrder dbClass = new DbClassOrder();
-			List<Order> orders = new ArrayList<Order>();
 	        List<Integer> orderIds = dbClass.getAllOrderIds(custProfile);
 	        for (int orderId : orderIds) {
 	        	List<OrderItem> orderItems = dbClass.getOrderItems(orderId);

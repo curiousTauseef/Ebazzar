@@ -197,28 +197,23 @@ public class CustomerSubsystemFacade implements CustomerSubsystem {
 	
 	@Override
 	public List<Order> getOrderHistory() {
-		// TODO done by waqas
-		//return unmodifiable list
 		return Collections.unmodifiableList(orderHistory);
 	}
 
 	@Override
 	public void setShippingAddressInCart(Address addr) {
-		// TODO done by waqas
 		shoppingCartSubsystem.setShippingAddress(addr);
 		
 	}
 
 	@Override
 	public void setBillingAddressInCart(Address addr) {
-		// TODO done by waqas
 		shoppingCartSubsystem.setBillingAddress(addr);
 		
 	}
 
 	@Override
 	public void setPaymentInfoInCart(CreditCard cc) {
-		// TODO done by waqas
 		shoppingCartSubsystem.setPaymentInfo(cc);
 
 		
@@ -226,29 +221,23 @@ public class CustomerSubsystemFacade implements CustomerSubsystem {
 
 	@Override
 	public void submitOrder() throws BackendException {
-		// TODO Auto-generated method stub
 		orderSubsystem.submitOrder(shoppingCartSubsystem.getLiveCart());
 		
 	}
 
 	@Override
 	public void refreshAfterSubmit() throws BackendException {
-		// TODO Auto-generated method stub
 		loadOrderData();
 		
 	}
 
 	@Override
 	public ShoppingCartSubsystem getShoppingCart() {
-		// TODO Auto-generated method stub
 		return shoppingCartSubsystem;
 	}
 
 	@Override
 	public void saveShoppingCart() throws BackendException {
-		// TODO Auto-generated method stub
-		
-		//set default values for payment and address
         if (shoppingCartSubsystem.getLiveCart().getShippingAddress() == null) {
             shoppingCartSubsystem.setShippingAddress(defaultShipAddress);
         }
@@ -258,16 +247,13 @@ public class CustomerSubsystemFacade implements CustomerSubsystem {
         if (shoppingCartSubsystem.getLiveCart().getPaymentInfo() == null) {
             shoppingCartSubsystem.setPaymentInfo(this.defaultPaymentInfo);
         }
-        // save live cart
         shoppingCartSubsystem.saveLiveCart();
 		
 	}
 
 	@Override
 	public void checkCreditCard(CreditCard cc) throws BusinessException {
-		// TODO Auto-generated method stub
 		ShoppingCart shoppingCart = ShoppingCartSubsystemFacade.INSTANCE.getLiveCart();
-		List<CartItem> cartItemsList = ShoppingCartSubsystemFacade.INSTANCE.getLiveCartItems();
 		Address billingAddress = shoppingCart.getBillingAddress();
 		CreditCard creditCard = shoppingCart.getPaymentInfo();
 	    Double amount = (double) 55;
@@ -283,13 +269,11 @@ public class CustomerSubsystemFacade implements CustomerSubsystem {
 
 	@Override
 	public DbClassAddressForTest getGenericDbClassAddress() {
-		// TODO Auto-generated method stub
 		return new DbClassAddress();
 	}
 
 	@Override
 	public CustomerProfile getGenericCustomerProfile() {
-		// TODO Auto-generated method stub
 		return new CustomerProfileImpl(1, "Test_1", "Test_2");
 	}
 	

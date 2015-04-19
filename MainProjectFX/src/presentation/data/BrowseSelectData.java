@@ -117,21 +117,16 @@ public enum BrowseSelectData  {
 	//CatalogList data
 	public List<CatalogPres> getCatalogList() throws BackendException {
 		
-		/*return BrowseAndSelectController.INSTANCE.getCatalogs()
-		    .stream()
-		    .map(catalog -> Util.catalogToCatalogPres(catalog))
-		    .collect(Collectors.toList());*/
-		
 		try {
 			ProductSubsystem productSub = new ProductSubsystemFacade();
 			List<Catalog> catalogs = productSub.getCatalogList();
-			List<CatalogPres> catalogPresList = new ArrayList<CatalogPres>();
+			/*List<CatalogPres> catalogPresList = new ArrayList<CatalogPres>();
 			for (int i = 0 ; i <catalogs.size(); i++) {
 				CatalogPres orderPres = new CatalogPres();
 				orderPres.setCatalog(catalogs.get(i));
 				catalogPresList.add(orderPres);
-			}
-			return catalogPresList;
+			}*/
+			return Util.catalogListToCatalogPresList(catalogs);
 		} catch (BackendException e) {
 			e.printStackTrace();
 			return null;

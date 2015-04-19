@@ -5,6 +5,7 @@ import java.util.List;
 
 import business.BusinessConstants;
 import business.SessionCache;
+import business.Util;
 import business.exceptions.BackendException;
 import business.externalinterfaces.CustomerSubsystem;
 import business.externalinterfaces.Order;
@@ -28,13 +29,13 @@ public enum ViewOrdersData {
 			CustomerSubsystem customerSub = (CustomerSubsystem) cache.get(BusinessConstants.CUSTOMER);
 			OrderSubsystem orderSub = new OrderSubsystemFacade(customerSub.getCustomerProfile());
 			List<Order> orders = orderSub.getOrderHistory();
-			List<OrderPres> orderPresList = new ArrayList<OrderPres>();
+			/*List<OrderPres> orderPresList = new ArrayList<OrderPres>();
 			for (int i = 0 ; i <orders.size(); i++) {
 				OrderPres orderPres = new OrderPres();
 				orderPres.setOrder((OrderImpl)orders.get(i));
 				orderPresList.add(orderPres);
-			}
-			return orderPresList;
+			}*/
+			return Util.orderListToOrderPresList(orders);
 		} catch (BackendException e) {
 			e.printStackTrace();
 			return null;
