@@ -132,7 +132,18 @@ public enum ShoppingCartSubsystemFacade implements ShoppingCartSubsystem {
             throw new BackendException(ex);
 
         }
-		
 	}
 
+	//DatTX
+	@Override
+	public ShoppingCart getFullInfoLiveCart() {
+        CustomerSubsystem custSubsystem = new CustomerSubsystemFacade();
+        custSubsystem.setCustomerProfile(customerProfile);
+        custSubsystem.loadDefaultCustomerData();
+        liveCart.setBillAddress(custSubsystem.getDefaultBillingAddress());
+        liveCart.setShipAddress(custSubsystem.getDefaultBillingAddress());
+        liveCart.setPaymentInfo(custSubsystem.getDefaultPaymentInfo());
+        return liveCart;
+	}
+	
 }

@@ -68,8 +68,25 @@ public class ProductSubsystemFacade implements ProductSubsystem {
     	}
     }
 	
+    //DatTX
 	public int readQuantityAvailable(Product product) {
-		//IMPLEMENT
-		return 5;
+		try {
+			DbClassProduct dbclass = new DbClassProduct();
+			return dbclass.readProduct(product.getProductId()).getQuantityAvail();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	//DatTX
+	@Override
+	public TwoKeyHashMap<Integer, String, Product> getProductTable() throws BackendException {
+		try {
+			DbClassProduct dbclass = new DbClassProduct();
+			return dbclass.readProductTable();
+		} catch (DatabaseException e) {
+			throw new BackendException(e);
+		}
 	}
 }

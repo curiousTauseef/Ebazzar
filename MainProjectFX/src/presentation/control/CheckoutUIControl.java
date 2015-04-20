@@ -310,19 +310,33 @@ public enum CheckoutUIControl {
 	private class SubmitHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent evt) {
-			orderCompleteWindow = new OrderCompleteWindow();
-			orderCompleteWindow.show();
-			finalOrderWindow.clearMessages();
-			finalOrderWindow.hide();
 			// DatTX
+			// Check FinalOrderRuleEngine
+			boolean rulesOk = true;
 			try {
-				ShoppingCart cart = ShoppingCartSubsystemFacade.INSTANCE.getLiveCart();
-				SessionCache cache = SessionCache.getInstance();
-				CustomerSubsystem customerSub = (CustomerSubsystem) cache.get(BusinessConstants.CUSTOMER);
-				OrderSubsystem orderSub = new OrderSubsystemFacade(customerSub.getCustomerProfile());
-				orderSub.submitOrder(cart);
-			} catch (Exception e) {
-				e.printStackTrace();
+				CheckoutController.INSTANCE.runFinalOrderRules(ShoppingCartSubsystemFacade.INSTANCE);
+			} catch (RuleException e) {
+				rulesOk = false;
+				finalOrderWindow.displayError(e.getMessage());
+			} catch (BusinessException e) {
+				rulesOk = false;
+				finalOrderWindow.displayError(e.getMessage());
+			}
+			if (rulesOk) {
+				orderCompleteWindow = new OrderCompleteWindow();
+				orderCompleteWindow.show();
+				finalOrderWindow.clearMessages();
+				finalOrderWindow.hide();
+				//Submit Order
+				try {
+					ShoppingCart liveCart = ShoppingCartSubsystemFacade.INSTANCE.getFullInfoLiveCart();
+					SessionCache cache = SessionCache.getInstance();
+					CustomerSubsystem customerSub = (CustomerSubsystem) cache.get(BusinessConstants.CUSTOMER);
+					OrderSubsystem orderSub = new OrderSubsystemFacade(customerSub.getCustomerProfile());
+					orderSub.submitOrder(liveCart);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 

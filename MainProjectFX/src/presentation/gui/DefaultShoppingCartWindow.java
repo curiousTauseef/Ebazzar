@@ -64,9 +64,9 @@ public interface DefaultShoppingCartWindow extends MessageableWindow, Modifiable
 			   displayError(ErrorMessages.GENERAL_ERR_MSG + ": Message: " + e.getMessage());
 		   }
 		   if(rulesOk) {
-			   //double price = Double.parseDouble(instance.priceProperty().get());
-			   //int quant = Integer.parseInt(quantRequested);
-			   //String newTotal = GuiUtils.formatPrice(quant * price);
+			   double price = Double.parseDouble(instance.priceProperty().get());
+			   int quant = Integer.parseInt(quantRequested);
+			   String newTotal = GuiUtils.formatPrice(quant * price);
 			   clearMessages();
 			   instance.setQuantity(new SimpleStringProperty(t.getNewValue()));
 			   
