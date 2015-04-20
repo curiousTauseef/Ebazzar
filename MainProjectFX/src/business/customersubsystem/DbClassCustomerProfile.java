@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import business.externalinterfaces.CustomerProfile;
+import business.externalinterfaces.DbClassCustomerProfileTest;
 import middleware.DbConfigProperties;
 import middleware.dataaccess.DataAccessSubsystemFacade;
 import middleware.exceptions.DatabaseException;
@@ -12,7 +14,7 @@ import middleware.externalinterfaces.DbClass;
 import middleware.externalinterfaces.DbConfigKey;
 
 
-class DbClassCustomerProfile implements DbClass {
+class DbClassCustomerProfile implements DbClass,DbClassCustomerProfileTest {
 	private static final Logger LOG = 
 		Logger.getLogger(DbClassCustomerProfile.class.getPackage().getName());
 	private DataAccessSubsystem dataAccessSS = 
@@ -73,6 +75,10 @@ class DbClassCustomerProfile implements DbClass {
         return query;
  
     }
+	@Override
+	public CustomerProfile getProfileForTest() {
+		return customerProfile;
+	}
 
  
 }
