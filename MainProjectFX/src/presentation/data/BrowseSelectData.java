@@ -14,6 +14,7 @@ import business.externalinterfaces.*;
 import business.ordersubsystem.OrderImpl;
 import business.ordersubsystem.OrderSubsystemFacade;
 import business.productsubsystem.ProductSubsystemFacade;
+import business.rulesubsystem.RulesSubsystemFacade;
 import business.usecasecontrol.BrowseAndSelectController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -110,22 +111,14 @@ public enum BrowseSelectData  {
 	}
 	
 	public int quantityAvailable(Product product) {
-		//read data from database
-		return DefaultData.DEFAULT_QUANTITY_AVAILABLE;
+		return product.getQuantityAvail();
 	}
 	
-	//CatalogList data
 	public List<CatalogPres> getCatalogList() throws BackendException {
 		
 		try {
 			ProductSubsystem productSub = new ProductSubsystemFacade();
 			List<Catalog> catalogs = productSub.getCatalogList();
-			/*List<CatalogPres> catalogPresList = new ArrayList<CatalogPres>();
-			for (int i = 0 ; i <catalogs.size(); i++) {
-				CatalogPres orderPres = new CatalogPres();
-				orderPres.setCatalog(catalogs.get(i));
-				catalogPresList.add(orderPres);
-			}*/
 			return Util.catalogListToCatalogPresList(catalogs);
 		} catch (BackendException e) {
 			e.printStackTrace();
@@ -134,7 +127,6 @@ public enum BrowseSelectData  {
 		
 	}
 	
-	//ProductList data
 	public List<ProductPres> getProductList(CatalogPres selectedCatalog) throws BackendException {
 		return BrowseAndSelectController.INSTANCE.getProducts(selectedCatalog.getCatalog())
 			    .stream()
@@ -142,8 +134,6 @@ public enum BrowseSelectData  {
 			    .collect(Collectors.toList());
 	}
 	
-	//ProductDetails data
-	// List<String> displayValues = 
 	public List<String> getProductDisplayValues(ProductPres productPres) {
 		return Arrays.asList(productPres.nameProperty().get(),
 				productPres.unitPriceProperty().get(),

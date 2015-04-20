@@ -5,9 +5,7 @@ import java.util.List;
 
 
 
-
 import business.exceptions.BackendException;
-import business.util.TwoKeyHashMap;
 
 public interface ProductSubsystem {
 
@@ -26,22 +24,21 @@ public interface ProductSubsystem {
 	
 	public Integer getProductIdFromName(String prodName) throws BackendException;
 	
-//	/** retrieves list of catalogs from database */
+	/** retrieves list of catalogs from database */
 
-//	
-//	public Catalog getCatalogFromName(String catName) throws BackendException;
+	
+	public Catalog getCatalogFromName(String catName) throws BackendException;
 
-//	/** saves newly created catalog */
-//	public void saveNewCatalog(Catalog catalog) throws BackendException;
-//
-//	/** saves a new product obtained from user input */
-//	public void saveNewProduct(Product product) throws BackendException;
-//
-//	/** deletes a product obtained from user input */
-//	public void deleteProduct(Product product) throws BackendException;
-//	
-//	/** deletes a catalog obtained from user input */
-//	public void deleteCatalog(Catalog catalog) throws BackendException;
+	/** saves newly created catalog */
+	public void saveNewCatalog(Catalog catalog) throws BackendException;
 
-	public TwoKeyHashMap<Integer,String,Product> getProductTable() throws BackendException ;
+	/** saves a new product obtained from user input */
+	public void saveNewProduct(Product product) throws BackendException;
+
+	/** deletes a product obtained from user input */
+	public void deleteProduct(Product product) throws BackendException;
+	
+	/** deletes a catalog obtained from user input */
+	public void deleteCatalog(Catalog catalog) throws BackendException;
+
 }
