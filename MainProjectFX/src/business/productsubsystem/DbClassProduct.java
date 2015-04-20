@@ -96,8 +96,7 @@ class DbClassProduct implements DbClass {
 		return productTable.clone();
 	}
 
-	public List<Product> readProductList(Catalog cat)
-			throws DatabaseException {
+	public List<Product> readProductList(Catalog cat)	throws DatabaseException {
 		if (productList == null) {
 			return refreshProductList(cat);
 		}

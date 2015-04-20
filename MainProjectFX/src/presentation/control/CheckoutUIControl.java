@@ -18,8 +18,6 @@ import presentation.gui.PaymentWindow;
 import presentation.gui.ShippingBillingWindow;
 import presentation.gui.ShoppingCartWindow;
 import presentation.gui.TermsWindow;
-import business.BusinessConstants;
-import business.SessionCache;
 //import rulesengine.OperatingException;
 //import rulesengine.ReteWrapper;
 //import rulesengine.ValidationException;
@@ -31,11 +29,6 @@ import business.exceptions.BusinessException;
 import business.exceptions.RuleException;
 import business.externalinterfaces.Address;
 import business.externalinterfaces.CustomerProfile;
-import business.externalinterfaces.CustomerSubsystem;
-import business.externalinterfaces.OrderSubsystem;
-import business.externalinterfaces.ShoppingCart;
-import business.ordersubsystem.OrderSubsystemFacade;
-import business.shoppingcartsubsystem.ShoppingCartSubsystemFacade;
 import business.usecasecontrol.CheckoutController;
 
 public enum CheckoutUIControl {
@@ -310,34 +303,10 @@ public enum CheckoutUIControl {
 	private class SubmitHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent evt) {
-			// DatTX
-			// Check FinalOrderRuleEngine
-			boolean rulesOk = true;
-			try {
-				CheckoutController.INSTANCE.runFinalOrderRules(ShoppingCartSubsystemFacade.INSTANCE);
-			} catch (RuleException e) {
-				rulesOk = false;
-				finalOrderWindow.displayError(e.getMessage());
-			} catch (BusinessException e) {
-				rulesOk = false;
-				finalOrderWindow.displayError(e.getMessage());
-			}
-			if (rulesOk) {
-				orderCompleteWindow = new OrderCompleteWindow();
-				orderCompleteWindow.show();
-				finalOrderWindow.clearMessages();
-				finalOrderWindow.hide();
-				//Submit Order
-				try {
-					ShoppingCart liveCart = ShoppingCartSubsystemFacade.INSTANCE.getFullInfoLiveCart();
-					SessionCache cache = SessionCache.getInstance();
-					CustomerSubsystem customerSub = (CustomerSubsystem) cache.get(BusinessConstants.CUSTOMER);
-					OrderSubsystem orderSub = new OrderSubsystemFacade(customerSub.getCustomerProfile());
-					orderSub.submitOrder(liveCart);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+			orderCompleteWindow = new OrderCompleteWindow();
+			orderCompleteWindow.show();
+			finalOrderWindow.clearMessages();
+			finalOrderWindow.hide();
 		}
 
 	}

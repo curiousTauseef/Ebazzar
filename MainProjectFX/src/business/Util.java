@@ -75,4 +75,12 @@ public class Util {
 					  .collect(Collectors.toList());
 				
 	}
+	
+	public static List<ProductPres> productListToProductPresList(List<Product> list) {
+		if(list == null) return null;
+		return list.stream().map(catalog -> {ProductPres productPres = new ProductPres();
+		productPres.setProduct(catalog); return productPres;})
+					  .collect(Collectors.toList());
+				
+	}
 }

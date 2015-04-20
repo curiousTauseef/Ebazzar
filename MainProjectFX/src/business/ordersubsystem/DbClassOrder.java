@@ -3,7 +3,6 @@ package business.ordersubsystem;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -85,37 +84,24 @@ class DbClassOrder implements DbClass {
     void submitOrder(ShoppingCart shopCart) throws DatabaseException {
     	//implement DatTX
     	try {
-    		dataAccessSS.createConnection(this);
-    	    dataAccessSS.startTransaction();
 	    	orderData = new OrderImpl();
 	    	orderData.setDate(LocalDate.now());
 	    	orderItems = new ArrayList<OrderItem>();
-	    	List<Integer> orders = getAllOrderIds(custProfile);
-	    	orders.stream().sorted();
-	    	int orderId = orders.get(orders.size()-1) + 1 ;
 	    	for (int i = 0 ; i < shopCart.getCartItems().size(); i++) {
 	    		CartItem cartItem = shopCart.getCartItems().get(i);
 				OrderItem item = new OrderItemImpl(cartItem.getProductName(),
 						Integer.parseInt(cartItem.getQuantity()),
 						Double.parseDouble(cartItem.getTotalprice())
 								/ Integer.parseInt(cartItem.getQuantity()));
-				item.setProductId(cartItem.getProductid());
-				item.setOrderId(orderId);
 				orderItems.add(item);
 				submitOrderItem(item);
 	    	}
 	    	orderData.setOrderItems(orderItems);
-	    	orderData.setShipAddress(shopCart.getShippingAddress());
-	    	orderData.setBillAddress(shopCart.getBillingAddress());
-	    	orderData.setPaymentInfo(shopCart.getPaymentInfo());
-	    	orderData.setOrderId(orderId);
 	    	order = orderData;
 	    	submitOrderData();
     	} catch (DatabaseException e) {
     		dataAccessSS.rollback();
     		throw e;
-    	} finally {
-    		dataAccessSS.releaseConnection();
     	}
     }
 	    
@@ -164,8 +150,6 @@ class DbClassOrder implements DbClass {
         Address shipAddr = order.getShipAddress();
         Address billAddr = order.getBillAddress();
         CreditCard cc = order.getPaymentInfo();
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        String formattedDate = order.getOrderDate().format( fmt );
         query = "INSERT into Ord "+
         "(orderid, custid, shipaddress1, shipcity, shipstate, shipzipcode, billaddress1, billcity, billstate,"+
            "billzipcode, nameoncard,  cardnum,cardtype, expdate, orderdate, totalpriceamount)" +
@@ -182,7 +166,7 @@ class DbClassOrder implements DbClass {
                   cc.getCardNum()+"','"+
                   cc.getCardType()+"','"+
                   cc.getExpirationDate()+"','"+
-                  formattedDate+"',"+
+                  order.getOrderDate()+"',"+
                   order.getTotalPrice()+")";       
     }
 	
@@ -190,9 +174,9 @@ class DbClassOrder implements DbClass {
     	//implement DatTX
         query = "INSERT INTO AccountsDb.OrderItem "+
         		"(orderitemid, orderid, productid, quantity, totalprice, shipmentcost, taxamount) " +
-        		"VALUES(NULL, " + orderItem.getOrderId() + "," +
-        		orderItem.getProductId() + "," +
-        		orderItem.getQuantity() + ",'" +
+        		"VALUES(null, " + orderItem.getOrderId() + ",'" +
+        		orderItem.getProductId() + "','" +
+        		orderItem.getQuantity() + "','" +
         		orderItem.getTotalPrice() + "','" +
         		0 + "','" +
         		0 + "')";
