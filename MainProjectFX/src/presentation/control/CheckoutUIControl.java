@@ -18,6 +18,8 @@ import presentation.gui.PaymentWindow;
 import presentation.gui.ShippingBillingWindow;
 import presentation.gui.ShoppingCartWindow;
 import presentation.gui.TermsWindow;
+import business.BusinessConstants;
+import business.SessionCache;
 //import rulesengine.OperatingException;
 //import rulesengine.ReteWrapper;
 //import rulesengine.ValidationException;
@@ -29,6 +31,11 @@ import business.exceptions.BusinessException;
 import business.exceptions.RuleException;
 import business.externalinterfaces.Address;
 import business.externalinterfaces.CustomerProfile;
+import business.externalinterfaces.CustomerSubsystem;
+import business.externalinterfaces.OrderSubsystem;
+import business.externalinterfaces.ShoppingCart;
+import business.ordersubsystem.OrderSubsystemFacade;
+import business.shoppingcartsubsystem.ShoppingCartSubsystemFacade;
 import business.usecasecontrol.CheckoutController;
 
 public enum CheckoutUIControl {
@@ -307,6 +314,16 @@ public enum CheckoutUIControl {
 			orderCompleteWindow.show();
 			finalOrderWindow.clearMessages();
 			finalOrderWindow.hide();
+			// DatTX
+			try {
+				ShoppingCart cart = ShoppingCartSubsystemFacade.INSTANCE.getLiveCart();
+				SessionCache cache = SessionCache.getInstance();
+				CustomerSubsystem customerSub = (CustomerSubsystem) cache.get(BusinessConstants.CUSTOMER);
+				OrderSubsystem orderSub = new OrderSubsystemFacade(customerSub.getCustomerProfile());
+				orderSub.submitOrder(cart);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
