@@ -7,16 +7,12 @@ import java.util.logging.Logger;
 
 import middleware.exceptions.DatabaseException;
 import business.customersubsystem.CustomerSubsystemFacade;
-import business.customersubsystem.DbClassAddress;
 import business.exceptions.BackendException;
-import business.exceptions.BusinessException;
-import business.exceptions.RuleException;
 import business.externalinterfaces.Address;
 import business.externalinterfaces.CartItem;
 import business.externalinterfaces.CreditCard;
 import business.externalinterfaces.CustomerProfile;
 import business.externalinterfaces.CustomerSubsystem;
-import business.externalinterfaces.Rules;
 import business.externalinterfaces.ShoppingCart;
 import business.externalinterfaces.ShoppingCartSubsystem;
 

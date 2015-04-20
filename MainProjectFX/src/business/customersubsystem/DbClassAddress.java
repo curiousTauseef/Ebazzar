@@ -107,7 +107,7 @@ public class DbClassAddress implements DbClass, DbClassAddressForTest {
     }
 	
     void buildSaveNewAddrQuery() throws DatabaseException {
-        query = "INSERT into altshipaddress " +
+        query = "INSERT into altaddress " +
         		"(addressid,custid,street,city,state,zip) " +
         		"VALUES(NULL," +
         				  custProfile.getCustId() + ",'" +
@@ -117,7 +117,7 @@ public class DbClassAddress implements DbClass, DbClassAddressForTest {
         				  address.getZip() + "')";
     }
     void buildReadAllAddressesQuery() {
-        query = "SELECT * from altshipaddress WHERE custid = 1";
+        query = "SELECT * from altaddress WHERE custid = 1";
     }
     void buildReadDefaultBillQuery() {
         query = "SELECT billaddress1, billaddress2, billcity, billstate, billzipcode " +

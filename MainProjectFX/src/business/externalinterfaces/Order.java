@@ -13,10 +13,19 @@ public interface Order {
     public Address getShipAddress();
     public Address getBillAddress();
     public CreditCard getPaymentInfo();
-    public void setShipAddress(Address address);
-    public void setBillAddress(Address address);
-    public void setPaymentInfo(CreditCard cc);
+    public void setOrderItems(List<OrderItem> orderItems);
+	public void setOrderId(int orderId);
+	public void setDate(LocalDate date);
+	public void setShipAddress(Address add);
+	public void setBillAddress(Address add);
+	public void setPaymentInfo(CreditCard cc);
+	
 }
+
+    
+ 
+	
+
 
 
 
