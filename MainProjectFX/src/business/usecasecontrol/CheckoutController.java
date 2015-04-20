@@ -1,30 +1,16 @@
 package business.usecasecontrol;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.logging.Logger;
 
-import middleware.DbConfigProperties;
-import presentation.data.BrowseSelectData;
-import rulesengine.OperatingException;
-import rulesengine.ReteWrapper;
-import rulesengine.ValidationException;
 import business.BusinessConstants;
 import business.SessionCache;
-import business.Util;
 import business.exceptions.BackendException;
 import business.exceptions.BusinessException;
 import business.exceptions.RuleException;
 import business.externalinterfaces.Address;
 import business.externalinterfaces.CreditCard;
 import business.externalinterfaces.CustomerSubsystem;
-import business.externalinterfaces.RulesConfigKey;
-import business.externalinterfaces.RulesConfigProperties;
-import business.externalinterfaces.ShoppingCart;
 import business.externalinterfaces.ShoppingCartSubsystem;
-import business.rulesbeans.FinalOrderBean;
-import business.rulesbeans.QuantityBean;
 
 public enum CheckoutController  {
 	INSTANCE;
@@ -50,35 +36,7 @@ public enum CheckoutController  {
 	
 	/** Asks the ShoppingCart Subsystem to run final order rules */
 	public void runFinalOrderRules(ShoppingCartSubsystem scss) throws RuleException, BusinessException {
-		//implement DatTX
-		ShoppingCart cart = scss.getLiveCart();
-		try {
-			// set up
-			RulesConfigProperties props = new RulesConfigProperties();
-			String moduleName = props.getProperty(RulesConfigKey.FINAL_ORDER_MODULE.getVal());
-			BufferedReader rulesReader = Util.pathToRules(getClass().getClassLoader(), props.getProperty(RulesConfigKey.FINAL_ORDER_RULES_FILE.getVal()));
-
-			String deftemplateName = props.getProperty(RulesConfigKey.FINAL_ORDER_DEFTEMPLATE.getVal());
-			FinalOrderBean quantityBean = new FinalOrderBean(cart);
-			HashMap h = new HashMap();
-			h.put(deftemplateName, quantityBean);
-
-			// start up the rules engine
-			ReteWrapper engine = new ReteWrapper();
-			engine.setRulesAsString(rulesReader);
-			engine.setCurrentModule(moduleName);
-			engine.setTable(h);
-			engine.runRules();
-			
-		} catch (ValidationException ex) {
-			throw new RuleException(ex.getMessage());
-		} catch (IOException ex) {
-			throw new RuleException(ex.getMessage());
-		} catch (OperatingException ex) {
-			throw new RuleException(ex.getMessage());
-		} catch (Exception ex) {
-			throw new RuleException(ex.getMessage());
-		}
+		//implement
 	}
 	
 	/** Asks Customer Subsystem to check credit card against 

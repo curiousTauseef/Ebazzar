@@ -122,8 +122,7 @@ public class MaintainProductsWindow extends Stage implements MessageableWindow {
 	        	CatalogPres selected = temp.get();
 	        	ManageProductsData.INSTANCE.setSelectedCatalog(selected);
 	        	ObservableList<ProductPres> list 
-	        		= FXCollections.observableArrayList(
-	        				ManageProductsData.INSTANCE.getProductsList(temp.get()));	
+	        		= FXCollections.observableArrayList(ManageProductsData.INSTANCE.getProductsList(temp.get()));	
 	        	setData(list);
 	        }
 		});

@@ -9,6 +9,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import business.CartItemData;
+import business.Util;
+import business.exceptions.BackendException;
 import business.externalinterfaces.*;
 import business.productsubsystem.ProductSubsystemFacade;
 
@@ -17,7 +19,8 @@ public enum ManageProductsData {
 	
 	private CatalogPres defaultCatalog = readDefaultCatalogFromDataSource();
 	private CatalogPres readDefaultCatalogFromDataSource() {
-		return DefaultData.CATALOG_LIST_DATA.get(0);
+		return readCatalogsFromDataSource().get(0);
+		//return DefaultData.CATALOG_LIST_DATA.get(0);
 	}
 	public CatalogPres getDefaultCatalog() {
 		return defaultCatalog;
@@ -41,7 +44,14 @@ public enum ManageProductsData {
 	
 	/** Delivers the requested products list to the UI */
 	public ObservableList<ProductPres> getProductsList(CatalogPres catPres) {
-		return FXCollections.observableList(productsMap.get(catPres));
+		ProductSubsystemFacade db = new ProductSubsystemFacade();
+		try {
+			List<Product> productList =  db.getProductList(catPres.getCatalog());
+			return FXCollections.observableList(Util.productListToProductPresList(productList));
+		} catch (BackendException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public ProductPres productPresFromData(Catalog c, String name, String date,  //MM/dd/yyyy 
@@ -79,8 +89,25 @@ public enum ManageProductsData {
 	private ObservableList<CatalogPres> catalogList = readCatalogsFromDataSource();
 
 	/** Initializes the catalogList */
-	private ObservableList<CatalogPres> readCatalogsFromDataSource() {
+	/*private ObservableList<CatalogPres> readCatalogsFromDataSource() {
 		return FXCollections.observableList(DefaultData.CATALOG_LIST_DATA);
+	}*/
+	
+	private ObservableList<CatalogPres> readCatalogsFromDataSource() {
+		ProductSubsystem productSub = new ProductSubsystemFacade();
+		try {
+			List<Catalog> catalogs = productSub.getCatalogList();
+			List<CatalogPres> catalogPresList = new ArrayList<CatalogPres>();
+			for (int i = 0 ; i <catalogs.size(); i++) {
+				CatalogPres orderPres = new CatalogPres();
+				orderPres.setCatalog(catalogs.get(i));
+				catalogPresList.add(orderPres);
+			}
+			return FXCollections.observableList(catalogPresList);
+		} catch (BackendException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	/** Delivers the already-populated catalogList to the UI */

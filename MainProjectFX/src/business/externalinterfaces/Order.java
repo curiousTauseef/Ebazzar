@@ -13,9 +13,9 @@ public interface Order {
     public Address getShipAddress();
     public Address getBillAddress();
     public CreditCard getPaymentInfo();
-    public void setShipAddress(Address address);
-    public void setBillAddress(Address address);
-    public void setPaymentInfo(CreditCard cc);
+    
+ 
+	
 }
 
 

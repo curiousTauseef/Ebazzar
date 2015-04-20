@@ -1,12 +1,14 @@
 package presentation.control;
 
 import presentation.data.CatalogPres;
+import presentation.data.DefaultData;
 import presentation.data.ManageProductsData;
 import presentation.data.ProductPres;
 import presentation.gui.MaintainCatalogsWindow;
 import presentation.gui.MaintainProductsWindow;
 import presentation.gui.MessageableWindow;
 import presentation.gui.TableUtil;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -90,23 +92,31 @@ public enum ManageProductsUIControl {
 	}
 
 
-	/*
-	 * private MenuItem maintainCatalogs() { MenuItem retval = new
-	 * MenuItem("Maintain Catalogs"); retval.setOnAction(evt -> {
-	 * MaintainCatalogsWindow maintain = new
-	 * MaintainCatalogsWindow(primaryStage); ObservableList<CatalogPres> list =
-	 * FXCollections.observableList( DefaultData.CATALOG_LIST_DATA);
-	 * maintain.setData(list); maintain.show(); primaryStage.hide();
-	 * 
-	 * }); return retval; } private MenuItem maintainProducts() { MenuItem
-	 * retval = new MenuItem("Maintain Products"); retval.setOnAction(evt -> {
-	 * MaintainProductsWindow maintain = new
-	 * MaintainProductsWindow(primaryStage); ObservableList<Product> list =
-	 * FXCollections.observableList(
-	 * DefaultData.PRODUCT_LIST_DATA.get(DefaultData.BOOKS_CATALOG));
-	 * maintain.setData(DefaultData.CATALOG_LIST_DATA, list); maintain.show();
-	 * primaryStage.hide();
-	 * 
-	 * }); return retval; }
-	 */
+	
+	/*private MenuItem maintainCatalogs() {
+		MenuItem retval = new MenuItem("Maintain Catalogs");
+		retval.setOnAction(evt -> {
+			MaintainCatalogsWindow maintain = new MaintainCatalogsWindow(primaryStage);
+			ObservableList<CatalogPres> list = FXCollections.observableList(DefaultData.CATALOG_LIST_DATA);
+			maintain.setData(list);
+			maintain.show();
+			primaryStage.hide();
+
+		});
+		return retval;
+	}
+
+	private MenuItem maintainProducts() {
+		MenuItem retval = new MenuItem("Maintain Products");
+		retval.setOnAction(evt -> {
+			MaintainProductsWindow maintain = new MaintainProductsWindow(primaryStage);
+			ObservableList<Product> list = FXCollections.observableList(DefaultData.PRODUCT_LIST_DATA.get(DefaultData.BOOKS_CATALOG));
+			maintain.setData(DefaultData.CATALOG_LIST_DATA, list);
+			maintain.show();
+			primaryStage.hide();
+
+		});
+		return retval;
+	}*/
+	 
 }
