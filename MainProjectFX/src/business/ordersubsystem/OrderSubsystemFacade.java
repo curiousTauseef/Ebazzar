@@ -74,7 +74,7 @@ public class OrderSubsystemFacade implements OrderSubsystem {
 	@Override
 	public void submitOrder(ShoppingCart shopCart) throws BackendException {
 		try {
-			DbClassOrder dbClass = new DbClassOrder();
+			DbClassOrder dbClass = new DbClassOrder(custProfile);
 			dbClass.submitOrder(shopCart);
 		} catch (DatabaseException e) {
 			throw new BackendException(e);
