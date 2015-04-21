@@ -6,9 +6,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import middleware.exceptions.DatabaseException;
-import business.customersubsystem.DbClassAddress;
 import business.exceptions.BackendException;
-import business.externalinterfaces.*;
+import business.externalinterfaces.Catalog;
+import business.externalinterfaces.DbClassCatalogForTest;
+import business.externalinterfaces.Product;
+import business.externalinterfaces.ProductSubsystem;
 import business.util.TwoKeyHashMap;
 
 public class ProductSubsystemFacade implements ProductSubsystem {

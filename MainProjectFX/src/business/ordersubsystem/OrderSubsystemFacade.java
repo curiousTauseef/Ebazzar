@@ -2,6 +2,7 @@ package business.ordersubsystem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import middleware.exceptions.DatabaseException;
@@ -13,7 +14,7 @@ import business.externalinterfaces.OrderSubsystem;
 import business.externalinterfaces.ShoppingCart;
 
 public class OrderSubsystemFacade implements OrderSubsystem {
-	private static final Logger LOG = 
+	private static final Logger LOGGER = 
 			Logger.getLogger(OrderSubsystemFacade.class.getPackage().getName());
 	CustomerProfile custProfile;
 	    
@@ -66,6 +67,7 @@ public class OrderSubsystemFacade implements OrderSubsystem {
 	        }
 	        return orders;
 		} catch (DatabaseException e) {
+			LOGGER.log(Level.SEVERE, "DB Exception occured while getting order history", e);
 			throw new BackendException(e);
 		}
 	}
@@ -77,6 +79,7 @@ public class OrderSubsystemFacade implements OrderSubsystem {
 			DbClassOrder dbClass = new DbClassOrder(custProfile);
 			dbClass.submitOrder(shopCart);
 		} catch (DatabaseException e) {
+			LOGGER.log(Level.SEVERE, "DB Exception occured while submit order", e);
 			throw new BackendException(e);
 		}
 		

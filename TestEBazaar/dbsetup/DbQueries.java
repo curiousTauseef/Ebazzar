@@ -13,8 +13,10 @@ import middleware.externalinterfaces.DbConfigKey;
 import alltests.AllTests;
 import business.customersubsystem.CustomerSubsystemFacade;
 import business.externalinterfaces.Address;
+import business.externalinterfaces.Catalog;
 import business.externalinterfaces.Order;
 import business.ordersubsystem.OrderSubsystemFacade;
+import business.productsubsystem.ProductSubsystemFacade;
 public class DbQueries {
 	static {
 		AllTests.initializeProperties();
@@ -248,7 +250,7 @@ public class DbQueries {
 		"INSERT into Product "+
 		"(productid,productname,totalquantity,priceperunit,mfgdate,catalogid,description) " +
 		"VALUES(NULL, '" +
-				  name+"',1,1,'12/12/00',1,'test')";				  
+				  name+"',1,1,'12/12/2015',1,'test')";				  
 		vals[1] = null;
 		vals[2] = name;
 		return vals;
@@ -354,6 +356,37 @@ public class DbQueries {
 			e.printStackTrace();
 		}
 		return orderList;
+	}
+	public static List<Catalog> readCustCatalogs() {
+		String query = readCatalogsSql();
+		List<Catalog> catalogList = new LinkedList<Catalog>();
+		try {
+			stmt = prodCon.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			
+	    	System.out.println(rs);
 
+                while(rs.next()) {
+                    
+                    Integer catalogid = rs.getInt("catalogid");
+                    String catalogname = rs.getString("catalogname");
+                    
+             
+                    Catalog catalog = ProductSubsystemFacade.createCatalog(catalogid, catalogname);
+                   
+                    catalogList.add(catalog);
+                }  
+                stmt.close();
+                
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			
+		}
+		return catalogList;
+		
+	}
+	public static String readCatalogsSql() {
+		return "SELECT * FROM CatalogType";
 	}
 }
