@@ -271,4 +271,14 @@ public class CustomerSubsystemFacade implements CustomerSubsystem {
 	public void setCustomerProfile(CustomerProfile profile) {
 		this.customerProfile = (CustomerProfileImpl) profile;
 	}
+	@Override
+	public void loadDefaultCustomerData() {
+		try {
+			loadDefaultBillAddress();
+			loadDefaultShipAddress();
+			loadDefaultPaymentInfo();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

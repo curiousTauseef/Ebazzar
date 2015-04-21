@@ -2,10 +2,8 @@
 package business.externalinterfaces;
 import java.util.List;
 
-
-
-
 import business.exceptions.BackendException;
+import business.util.TwoKeyHashMap;
 
 public interface ProductSubsystem {
 
@@ -41,4 +39,5 @@ public interface ProductSubsystem {
 	/** deletes a catalog obtained from user input */
 	public void deleteCatalog(Catalog catalog) throws BackendException;
 
+	public TwoKeyHashMap<Integer,String,Product> getProductTable() throws BackendException ;
 }

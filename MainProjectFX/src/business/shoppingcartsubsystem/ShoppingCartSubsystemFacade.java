@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import middleware.exceptions.DatabaseException;
+import business.customersubsystem.CustomerSubsystemFacade;
 import business.exceptions.BackendException;
 import business.externalinterfaces.Address;
 import business.externalinterfaces.CartItem;
 import business.externalinterfaces.CreditCard;
 import business.externalinterfaces.CustomerProfile;
+import business.externalinterfaces.CustomerSubsystem;
 import business.externalinterfaces.ShoppingCart;
 import business.externalinterfaces.ShoppingCartSubsystem;
 
@@ -106,15 +108,31 @@ public enum ShoppingCartSubsystemFacade implements ShoppingCartSubsystem {
 
 	@Override
 	public void saveLiveCart() throws BackendException {
+		// TODO Auto-generated method stub
 		try {
-			DbClassShoppingCart dbClass = new DbClassShoppingCart();
-	        dbClass.saveCart(customerProfile, liveCart);
-	        savedCart = liveCart;
+            DbClassShoppingCart dbclass = new DbClassShoppingCart();
+            CustomerSubsystem custSubsystem = new CustomerSubsystemFacade();
+            custSubsystem.setCustomerProfile(customerProfile);
+            custSubsystem.loadDefaultCustomerData();
+            liveCart.setBillAddress(custSubsystem.getDefaultBillingAddress());
+            liveCart.setShipAddress(custSubsystem.getDefaultBillingAddress());
+            liveCart.setPaymentInfo(custSubsystem.getDefaultPaymentInfo());
+            dbclass.saveCart(customerProfile, liveCart);
         } catch(DatabaseException ex)  {
             throw new BackendException(ex);
 
         }
-		
 	}
 
+	//DatTX
+	@Override
+	public ShoppingCart getFullInfoLiveCart() {
+        CustomerSubsystem custSubsystem = new CustomerSubsystemFacade();
+        custSubsystem.setCustomerProfile(customerProfile);
+        custSubsystem.loadDefaultCustomerData();
+        liveCart.setBillAddress(custSubsystem.getDefaultBillingAddress());
+        liveCart.setShipAddress(custSubsystem.getDefaultBillingAddress());
+        liveCart.setPaymentInfo(custSubsystem.getDefaultPaymentInfo());
+        return liveCart;
+	}
 }
