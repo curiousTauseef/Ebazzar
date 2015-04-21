@@ -4,7 +4,6 @@ package business.usecasecontrol;
 import java.util.List;
 
 import presentation.data.DataUtil;
-import middleware.exceptions.DatabaseException;
 import business.RulesQuantity;
 import business.exceptions.BackendException;
 import business.exceptions.BusinessException;
@@ -17,7 +16,6 @@ import business.externalinterfaces.Product;
 import business.externalinterfaces.ProductSubsystem;
 import business.externalinterfaces.Rules;
 import business.externalinterfaces.ShoppingCartSubsystem;
-import business.productsubsystem.DbClassCatalogTypes;
 import business.productsubsystem.ProductSubsystemFacade;
 import business.shoppingcartsubsystem.ShoppingCartSubsystemFacade;
 

@@ -5,7 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-import presentation.data.*;
+import presentation.data.OrderPres;
+import presentation.data.ViewOrdersData;
 import presentation.gui.OrderDetailWindow;
 import presentation.gui.OrdersWindow;
 
@@ -28,7 +29,7 @@ public enum ViewOrdersUIControl {
 			ordersWindow = new OrdersWindow(primaryStage);
 			ordersWindow.setData(FXCollections.observableList(ViewOrdersData.INSTANCE.getOrders()));
 			ordersWindow.show();
-	        primaryStage.hide();			
+	        primaryStage.hide();
 		}	
 	}
 	public ViewOrdersHandler getViewOrdersHandler() {
