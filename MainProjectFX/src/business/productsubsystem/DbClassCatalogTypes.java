@@ -2,11 +2,8 @@ package business.productsubsystem;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Logger;
 
-import business.externalinterfaces.Catalog;
-import business.externalinterfaces.DbClassCatalogForTest;
 import middleware.DbConfigProperties;
 import middleware.dataaccess.DataAccessSubsystemFacade;
 import middleware.exceptions.DatabaseException;
@@ -14,7 +11,7 @@ import middleware.externalinterfaces.DataAccessSubsystem;
 import middleware.externalinterfaces.DbClass;
 import middleware.externalinterfaces.DbConfigKey;
 
-public class DbClassCatalogTypes implements DbClass, DbClassCatalogForTest {
+public class DbClassCatalogTypes implements DbClass {
 	@SuppressWarnings("unused")
 	private static final Logger LOG = 
 		Logger.getLogger(DbClassCatalogTypes.class.getPackage().getName());
@@ -67,20 +64,5 @@ public class DbClassCatalogTypes implements DbClass, DbClassCatalogForTest {
 
         return query;
     }
-
-	@Override
-	public List<Catalog> getCatalogList() {
-		DbClassCatalogTypes cT = new DbClassCatalogTypes();
-		try {
-			return cT.getCatalogTypes().getCatalogs();
-		} catch (DatabaseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-    
-
-	
 
 }

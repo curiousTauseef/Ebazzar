@@ -92,7 +92,8 @@ public class AddCatalogPopup extends Popup {
 				if(idNewVal.equals("0")) {
 					idNewVal = DefaultData.generateId(10);
 				}
-				Catalog newCat = ProductSubsystemFacade.createCatalog(Integer.parseInt(idNewVal), name.getText());
+				Catalog newCat = ProductSubsystemFacade.createCatalog(
+						Integer.parseInt(idNewVal), name.getText());
 				CatalogPres catPres = new CatalogPres();
 				catPres.setCatalog(newCat);
 				maintainCatalogsWindow.addItem(catPres);

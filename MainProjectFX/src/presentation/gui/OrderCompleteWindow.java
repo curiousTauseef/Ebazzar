@@ -1,5 +1,6 @@
 package presentation.gui;
 
+import presentation.control.CheckoutUIControl;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,7 +13,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import presentation.control.CheckoutUIControl;
 
 public class OrderCompleteWindow extends Stage {
 	

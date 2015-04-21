@@ -1,9 +1,6 @@
 package business.productsubsystem;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import middleware.DbConfigProperties;
@@ -12,9 +9,6 @@ import middleware.exceptions.DatabaseException;
 import middleware.externalinterfaces.DataAccessSubsystem;
 import middleware.externalinterfaces.DbClass;
 import middleware.externalinterfaces.DbConfigKey;
-import business.externalinterfaces.Catalog;
-import business.externalinterfaces.Product;
-import business.util.TwoKeyHashMap;
 
 public class DbClassCatalog implements DbClass {
 	@SuppressWarnings("unused")
@@ -23,46 +17,21 @@ public class DbClassCatalog implements DbClass {
 	private DataAccessSubsystem dataAccessSS = 
     	new DataAccessSubsystemFacade();
 	
-	private List<Catalog> catalogList;
-	private static TwoKeyHashMap<Integer, String, Catalog> catalogTable;
-	private Catalog catalog;
 	private String catalogName;
 	private String query;
     private String queryType;
-    private Product product;
-    Integer catalogId;
-    
     private final String SAVE = "Save";
-    private final String LOAD_CAT_TABLE = "LoadCatTable";
-	private final String READ_CATALOG = "ReadCatalog";
-	private final String DELETE_CATALOG = "DeleteCatalog";
-	
-	private final String READ_PROD_LIST = "ReadProdList";
-	private final String SAVE_NEW_PROD = "SaveNewProd";
     
-	/*  @edited by Tauseef  */
-    public void saveNewCatalog(Catalog catalog) throws DatabaseException {
-    	this.catalogName = catalog.getName();
+    public void saveNewCatalog(String name) throws DatabaseException {
+    	this.catalogName = name;
     	queryType = SAVE;
     	dataAccessSS.saveWithinTransaction(this);  	
     }
-    
-    /*  @added by Tauseef  */
-    public void deleteCatalog(Catalog catalog) throws DatabaseException {
-    	catalogId = catalog.getId();
-    	queryType = DELETE_CATALOG;
-    	dataAccessSS.saveWithinTransaction(this);
-	}
      
-    /*  @edited by Tauseef  */
 	public void buildQuery() throws DatabaseException {
 		if(queryType.equals(SAVE)) {
 			buildSaveQuery();
-		} else if (queryType.equals(READ_CATALOG)) {
-			buildReadCatalogQuery();
-		} else if (queryType.equals(DELETE_CATALOG)) {
-			buildDeleteCatalogQuery();
-		}
+		}		
 	}
 	
 	void buildSaveQuery() throws DatabaseException {
@@ -70,14 +39,6 @@ public class DbClassCatalog implements DbClass {
 		"(catalogid,catalogname) " +
 		"VALUES(NULL,'"+
 				  catalogName+"')"; 
-	}
-	
-	private void buildReadCatalogQuery() {
-		query = "SELECT * FROM CatalogType";
-	}
-	
-	private void buildDeleteCatalogQuery() {
-		query = "DELETE FROM CatalogType WHERE catalogId = " + catalogId;
 	}
 
 	public String getDbUrl() {
@@ -89,57 +50,9 @@ public class DbClassCatalog implements DbClass {
 		return query;
 	}
 
-	public TwoKeyHashMap<Integer, String, Catalog> refreshCatalogTable() throws DatabaseException {
-		queryType = READ_CATALOG;
-		dataAccessSS.atomicRead(this);
-		
-		// Return a clone since productTable must not be corrupted
-		return catalogTable.clone();
-	}
-	
-	public TwoKeyHashMap<Integer, String, Catalog> readCatalogTable() throws DatabaseException {
-		if (catalogTable != null) {
-			return catalogTable.clone();
-		}
-		return refreshCatalogTable();
-	}
-	
-	public Catalog readCatalog(Integer catalogId) throws DatabaseException {
-		if (catalogTable != null && catalogTable.isAFirstKey(catalogId)) {
-			return catalogTable.getValWithFirstKey(catalogId);
-		}
-		queryType = READ_CATALOG;
-		this.catalogId = catalogId;
-		dataAccessSS.atomicRead(this);
-		return catalog;
-	}
-	
-	 void populateCatalogList(ResultSet rs) throws DatabaseException {
-	        catalogList = new LinkedList<Catalog>();
-	        if(rs != null){
-	            try {
-	                while(rs.next()) {
-	                    catalog = new CatalogImpl();
-	                    String str = rs.getString(catalogName);
-	                    catalog.setName(str);
-	                    catalogList.add(catalog);
-	                }                
-	            }
-	            catch(SQLException e){
-	                throw new DatabaseException(e);
-	            }         
-	        }       
-	    }
-
 	public void populateEntity(ResultSet resultSet) throws DatabaseException {
-		if(queryType.equals(READ_CATALOG)){
-            populateCatalogList(resultSet);
-        }	
+		// do nothing
 		
 	}
-	
-	public List<Catalog> getCatalogList() {
-        return catalogList;
-    }
 	
 }
