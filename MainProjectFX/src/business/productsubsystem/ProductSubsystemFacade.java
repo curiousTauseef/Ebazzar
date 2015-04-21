@@ -68,25 +68,33 @@ public class ProductSubsystemFacade implements ProductSubsystem {
     	}
     }
 	
-    //DatTX
 	public int readQuantityAvailable(Product product) {
-		try {
-			DbClassProduct dbclass = new DbClassProduct();
-			return dbclass.readProduct(product.getProductId()).getQuantityAvail();
-		} catch (DatabaseException e) {
-			e.printStackTrace();
-			return 0;
-		}
+		//IMPLEMENT
+		return 5;
 	}
-	
-	//DatTX
 	@Override
-	public TwoKeyHashMap<Integer, String, Product> getProductTable() throws BackendException {
-		try {
-			DbClassProduct dbclass = new DbClassProduct();
-			return dbclass.readProductTable();
-		} catch (DatabaseException e) {
-			throw new BackendException(e);
-		}
+	public Catalog getCatalogFromName(String catName) throws BackendException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void saveNewCatalog(Catalog catalog) throws BackendException {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void saveNewProduct(Product product) throws BackendException {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void deleteProduct(Product product) throws BackendException {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void deleteCatalog(Catalog catalog) throws BackendException {
+		// TODO Auto-generated method stub
+		
 	}
 }

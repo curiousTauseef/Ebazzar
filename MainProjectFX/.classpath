@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/Volumes/Dat Tran HD/Study/MUM/SWE/E-Bazaar/Final Project EBazaar/externalJars/creditVerifSystem.jar"/>
-	<classpathentry kind="lib" path="/Volumes/Dat Tran HD/Study/MUM/SWE/E-Bazaar/Final Project EBazaar/externalJars/jess.jar"/>
-	<classpathentry kind="lib" path="/Volumes/Dat Tran HD/Study/MUM/SWE/E-Bazaar/Final Project EBazaar/externalJars/junit.jar"/>
-	<classpathentry kind="lib" path="/Volumes/Dat Tran HD/Study/MUM/SWE/E-Bazaar/Final Project EBazaar/externalJars/mysql-connector-java-5.1.20-bin.jar"/>
-	<classpathentry kind="lib" path="/Volumes/Dat Tran HD/Study/MUM/SWE/E-Bazaar/Final Project EBazaar/externalJars/rulesencoding.jar"/>
-	<classpathentry kind="lib" path="/Volumes/Dat Tran HD/Study/MUM/SWE/E-Bazaar/Final Project EBazaar/externalJars/rulesengine.jar"/>
-	<classpathentry kind="lib" path="/Volumes/Dat Tran HD/Study/MUM/SWE/E-Bazaar/Final Project EBazaar/externalJars/slf4j-api-1.7.2.jar"/>
-	<classpathentry kind="lib" path="/Volumes/Dat Tran HD/Study/MUM/SWE/E-Bazaar/Final Project EBazaar/externalJars/slf4j-jdk14-1.7.2.jar"/>
-
+	<classpathentry kind="lib" path="E:/mum_dev_env/libs/externalJars/creditVerifSystem.jar"/>
+	<classpathentry kind="lib" path="E:/mum_dev_env/libs/externalJars/jess.jar"/>
+	<classpathentry kind="lib" path="E:/mum_dev_env/libs/externalJars/junit.jar"/>
+	<classpathentry kind="lib" path="E:/mum_dev_env/libs/externalJars/mysql-connector-java-5.1.20-bin.jar"/>
+	<classpathentry kind="lib" path="E:/mum_dev_env/libs/externalJars/rulesencoding.jar"/>
+	<classpathentry kind="lib" path="E:/mum_dev_env/libs/externalJars/rulesengine.jar"/>
+	<classpathentry kind="lib" path="E:/mum_dev_env/libs/externalJars/slf4j-api-1.7.2.jar"/>
+	<classpathentry kind="lib" path="E:/mum_dev_env/libs/externalJars/slf4j-jdk14-1.7.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

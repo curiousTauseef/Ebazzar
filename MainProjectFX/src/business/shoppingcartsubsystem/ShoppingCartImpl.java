@@ -56,10 +56,10 @@ class ShoppingCartImpl implements ShoppingCart {
     	this.cartItems = cartItems;
     }
     
-    public void setShipAddress(Address addr){
+    void setShipAddress(Address addr){
         shipAddress = addr;
     }
-    public void setBillAddress(Address addr){
+    void setBillAddress(Address addr){
         billAddress = addr;
     }
     
