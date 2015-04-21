@@ -1,5 +1,6 @@
 package presentation.control;
 
+import business.usecasecontrol.ViewOrdersController;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,7 +28,7 @@ public enum ViewOrdersUIControl {
 		@Override
 		public void handle(ActionEvent evt) {
 			ordersWindow = new OrdersWindow(primaryStage);
-			ordersWindow.setData(FXCollections.observableList(ViewOrdersData.INSTANCE.getOrders()));
+			ordersWindow.setData(FXCollections.observableList(ViewOrdersController.INSTANCE.getOrders()));
 			ordersWindow.show();
 	        primaryStage.hide();
 		}	
