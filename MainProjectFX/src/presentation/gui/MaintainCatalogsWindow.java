@@ -145,8 +145,7 @@ public class MaintainCatalogsWindow extends Stage implements MessageableWindow {
 			TableUtil.selectByRow(table);
 		    ObservableList<CatalogPres> tableItems = table.getItems();
 		    ObservableList<Integer> selectedIndices = table.getSelectionModel().getSelectedIndices();
-		    ObservableList<CatalogPres> selectedItems = table.getSelectionModel()
-					.getSelectedItems();
+		    ObservableList<CatalogPres> selectedItems = table.getSelectionModel().getSelectedItems();
 		    if(tableItems.isEmpty()) {
 		    	messageBar.setText("Nothing to delete!");
 		    } else if (selectedIndices == null || selectedIndices.isEmpty()) {
