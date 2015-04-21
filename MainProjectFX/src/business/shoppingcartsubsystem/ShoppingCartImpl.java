@@ -18,11 +18,27 @@ class ShoppingCartImpl implements ShoppingCart {
     private CreditCard creditCard;
     @SuppressWarnings("unused")
 	private String cartId;
+    private String totalShipmentCost;
+    private String totalTaxAmount;
       
-    ShoppingCartImpl(List<CartItem> cartItems) {
+    public String getTotalShipmentCost() {
+		return totalShipmentCost;
+	}
+	public void setTotalShipmentCost(String totalShipmentCost) {
+		this.totalShipmentCost = totalShipmentCost;
+	}
+	ShoppingCartImpl(List<CartItem> cartItems) {
+		totalShipmentCost = "0";
+		totalTaxAmount = "0";
         this.cartItems = cartItems;
     }
-    ShoppingCartImpl(){
+    public String getTotalTaxAmount() {
+		return totalTaxAmount;
+	}
+	public void setTotalTaxAmount(String totalTaxAmount) {
+		this.totalTaxAmount = totalTaxAmount;
+	}
+	ShoppingCartImpl(){
     	cartItems = new ArrayList<CartItem>();
     }
     void setCartId(String cartId){
@@ -108,5 +124,13 @@ class ShoppingCartImpl implements ShoppingCart {
         }
     	return sum;
     }
+	@Override
+	public String getTotalAmountCharged() {
+		return Double.toString(getTotalPrice()+Double.parseDouble(totalShipmentCost)+Double.parseDouble(totalTaxAmount));
+	}
+	@Override
+	public String getCartId() {
+		 return cartId;
+	}
  
 }

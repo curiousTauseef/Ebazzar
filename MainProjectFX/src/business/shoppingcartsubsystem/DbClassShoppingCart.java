@@ -21,10 +21,11 @@ import business.externalinterfaces.Address;
 import business.externalinterfaces.CartItem;
 import business.externalinterfaces.CreditCard;
 import business.externalinterfaces.CustomerProfile;
+import business.externalinterfaces.DbClassShoppingCartForTest;
 import business.externalinterfaces.ShoppingCart;
 
 
-public class DbClassShoppingCart implements DbClass {
+public class DbClassShoppingCart implements DbClass,DbClassShoppingCartForTest {
 	private static final Logger LOG = Logger.getLogger(DbClassShoppingCart.class
 			.getPackage().getName());
 	private DataAccessSubsystem dataAccessSS = new DataAccessSubsystemFacade();
@@ -134,7 +135,7 @@ public class DbClassShoppingCart implements DbClass {
     }
     
    
-    ShoppingCartImpl retrieveSavedCart(CustomerProfile custProfile) throws DatabaseException {
+    public ShoppingCartImpl retrieveSavedCart(CustomerProfile custProfile) throws DatabaseException {
     	this.custProfile = custProfile;
     	dataAccessSS.createConnection(this);
 	    dataAccessSS.startTransaction();

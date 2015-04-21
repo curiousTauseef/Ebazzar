@@ -13,6 +13,7 @@ import business.externalinterfaces.CartItem;
 import business.externalinterfaces.CreditCard;
 import business.externalinterfaces.CustomerProfile;
 import business.externalinterfaces.CustomerSubsystem;
+import business.externalinterfaces.DbClassShoppingCartForTest;
 import business.externalinterfaces.ShoppingCart;
 import business.externalinterfaces.ShoppingCartSubsystem;
 
@@ -135,4 +136,9 @@ public enum ShoppingCartSubsystemFacade implements ShoppingCartSubsystem {
         liveCart.setPaymentInfo(custSubsystem.getDefaultPaymentInfo());
         return liveCart;
 	}
+	@Override
+	public DbClassShoppingCartForTest getGenericDbClassShoppingCart() {
+		return new DbClassShoppingCart();
+	}
+
 }

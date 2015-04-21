@@ -17,4 +17,6 @@ public interface ShoppingCart {
     void setShipAddress(Address addr);
     void setBillAddress(Address addr);
     public void setPaymentInfo(CreditCard cc);
+    String getTotalAmountCharged();
+    String getCartId();
 }

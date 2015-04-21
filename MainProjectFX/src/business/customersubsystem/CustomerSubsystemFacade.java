@@ -18,6 +18,7 @@ import business.externalinterfaces.CreditCard;
 import business.externalinterfaces.CustomerProfile;
 import business.externalinterfaces.CustomerSubsystem;
 import business.externalinterfaces.DbClassAddressForTest;
+import business.externalinterfaces.DbClassCustomerProfileForTest;
 import business.externalinterfaces.Order;
 import business.externalinterfaces.OrderSubsystem;
 import business.externalinterfaces.Rules;
@@ -280,5 +281,10 @@ public class CustomerSubsystemFacade implements CustomerSubsystem {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public DbClassCustomerProfileForTest getGenericDbClassCustomerProfile() {
+		return new DbClassCustomerProfile();
 	}
 }
