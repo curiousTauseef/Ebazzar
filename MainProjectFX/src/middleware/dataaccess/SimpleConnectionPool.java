@@ -42,6 +42,9 @@ class SimpleConnectionPool {
 			.getVal());
 	private final String DEFAULT_MAX_CONN = props
 			.getProperty(DbConfigKey.MAX_CONNECTIONS.getVal());
+	private final String DEFAULT_PASSWORD = props.getProperty(DbConfigKey.DB_PASSWORD
+			.getVal());
+	
 
 	private static SimpleConnectionPool instance;
 

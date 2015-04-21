@@ -274,7 +274,7 @@ public class CustomerSubsystemFacade implements CustomerSubsystem {
 
 	@Override
 	public CustomerProfile getGenericCustomerProfile() {
-		return new CustomerProfileImpl(1, "Test_1", "Test_2");
+		return new CustomerProfileImpl(1, "John", "Smith");
 	}
 	
 	public void setCustomerProfile(CustomerProfile profile) {

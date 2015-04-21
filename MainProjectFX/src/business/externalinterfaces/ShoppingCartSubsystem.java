@@ -3,9 +3,14 @@ package business.externalinterfaces;
 
 import java.util.List;
 
+import business.BusinessConstants;
+import business.SessionCache;
+import business.customersubsystem.CustomerSubsystemFacade;
 import business.exceptions.BackendException;
 import business.exceptions.BusinessException;
 import business.exceptions.RuleException;
+import business.ordersubsystem.OrderSubsystemFacade;
+import business.shoppingcartsubsystem.ShoppingCartSubsystemFacade;
 
 
 public interface ShoppingCartSubsystem {
@@ -92,4 +97,7 @@ public interface ShoppingCartSubsystem {
 //       *  will be checked against quantity requested)
 //       */
 //   public void runFinalOrderRules() throws RuleException, BusinessException;
+	
+	//DatTX
+	public ShoppingCart getFullInfoLiveCart();
 }
