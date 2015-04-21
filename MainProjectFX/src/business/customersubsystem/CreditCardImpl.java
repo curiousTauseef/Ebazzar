@@ -9,7 +9,8 @@ public class CreditCardImpl implements CreditCard {
     String expirationDate;
     String cardNum;
     String cardType;
-    public CreditCardImpl(String nameOnCard,String expirationDate, String cardNum, String cardType) {
+    public CreditCardImpl(String nameOnCard,String expirationDate,
+               String cardNum, String cardType) {
         this.nameOnCard=nameOnCard;
         this.expirationDate=expirationDate;
         this.cardNum=cardNum;

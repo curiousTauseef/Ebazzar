@@ -2,6 +2,7 @@ package presentation.data;
 
 import javafx.beans.property.SimpleStringProperty;
 import business.externalinterfaces.OrderItem;
+import business.ordersubsystem.OrderItemImpl;
 
 public class OrderItemPres {
 	public OrderItemPres(OrderItem orderItem) {

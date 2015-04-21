@@ -1,8 +1,5 @@
 package launch;
 
-import java.util.logging.Logger;
-
-import business.customersubsystem.CustomerSubsystemFacade;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -26,7 +23,6 @@ import presentation.control.ViewOrdersUIControl;
 
 
 public class Start extends Application {
-	private static final Logger LOGGER = Logger.getLogger(Start.class.getName());
 	public static void main(String[] args) {
 		launch(args);
 	}

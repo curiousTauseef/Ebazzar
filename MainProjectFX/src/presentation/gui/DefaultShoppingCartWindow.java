@@ -39,17 +39,20 @@ public interface DefaultShoppingCartWindow extends MessageableWindow, Modifiable
 		getTable().setEditable(true);
         
         //create columns
-        TableColumn<CartItemPres, String> itemNameCol   	= TableUtil.makeTableColumn(new CartItemPres(), "Item Name", "itemNameProperty", 200);
+        TableColumn<CartItemPres, String> itemNameCol 
+        	= TableUtil.makeTableColumn(new CartItemPres(), "Item Name", "itemNameProperty", 200);
         
         //quantity column is trickier
         
-	    setQuantityCol(TableUtil.makeEditableTableColumn(getTable(), new CartItemPres(), "Quantity", "quantityProperty", 80));  
+	    setQuantityCol(TableUtil.makeEditableTableColumn(getTable(), new CartItemPres(), 
+	    		"Quantity", "quantityProperty", 80));  
         getQuantityCol().setOnEditCommit(t -> {
 		   CartItemPres instance = t.getTableView().getItems().get(t.getTablePosition().getRow());
 		   String quantRequested = t.getNewValue();
 		   boolean rulesOk = true;
 		   try {
-			   Product product = BrowseSelectData.INSTANCE.getProductForProductName(instance.getCartItem().getItemName());
+			   Product product 
+			   	  = BrowseSelectData.INSTANCE.getProductForProductName(instance.getCartItem().getItemName());
 			   BrowseSelectUIControl.INSTANCE.runQuantityRules(product, quantRequested);
 		   } catch(RuleException e) {
 			   getQuantityCol().getCellFactory().call(getQuantityCol()).cancelEdit();
@@ -157,6 +160,8 @@ public interface DefaultShoppingCartWindow extends MessageableWindow, Modifiable
 		//selects the quantity cell so that it can be edited easily
 		selModel.select(0, getQuantityCol());
 	}
+	
+	
 	
 	default public void setTotalInCart(String amt) {
 		getTotal().setText(amt);

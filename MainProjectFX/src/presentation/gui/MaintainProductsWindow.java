@@ -96,6 +96,7 @@ public class MaintainProductsWindow extends Stage implements MessageableWindow {
 		//turns on cell selection 
 		//TableView.TableViewSelectionModel<Product> selModel = TableUtil.selectByCell(table);
 	}
+	
 	public void setData(ObservableList<ProductPres> items) {		
 		table.setItems(items);
 	}
@@ -113,6 +114,7 @@ public class MaintainProductsWindow extends Stage implements MessageableWindow {
 		catalogCombo.valueProperty().addListener(new ChangeListener<String>() {
 	        @Override 
 	        public void changed(ObservableValue ov, String oldval, String newval) {
+	        	
 	        	//Guaranteed to find a value
 	        	Optional<CatalogPres> temp 
 	        	   = ManageProductsData.INSTANCE.getCatalogList()
@@ -120,9 +122,7 @@ public class MaintainProductsWindow extends Stage implements MessageableWindow {
 	        	                .filter(c -> c.nameProperty().get().equals(newval))
 	        	                .findFirst();
 	        	CatalogPres selected = temp.get();
-	        	ManageProductsData.INSTANCE.setSelectedCatalog(selected);
-	        	ObservableList<ProductPres> list 
-	        		= FXCollections.observableArrayList(ManageProductsData.INSTANCE.getProductsList(temp.get()));	
+	        	ObservableList<ProductPres> list = ManageProductsData.INSTANCE.getProductsList(selected);
 	        	setData(list);
 	        }
 		});
@@ -199,8 +199,7 @@ public class MaintainProductsWindow extends Stage implements MessageableWindow {
 			CatalogPres selectedCatalog = ManageProductsData.INSTANCE.getSelectedCatalog();
 		    ObservableList<ProductPres> tableItems = ManageProductsData.INSTANCE.getProductsList(selectedCatalog);
 		    ObservableList<Integer> selectedIndices = table.getSelectionModel().getSelectedIndices();
-		    ObservableList<ProductPres> selectedItems = table.getSelectionModel()
-					.getSelectedItems();
+		    ObservableList<ProductPres> selectedItems = table.getSelectionModel().getSelectedItems();
 		    if(tableItems.isEmpty()) {
 		    	messageBar.setText("Nothing to delete!");
 		    } else if (selectedIndices == null || selectedIndices.isEmpty()) {

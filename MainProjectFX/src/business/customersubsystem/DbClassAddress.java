@@ -208,6 +208,7 @@ public class DbClassAddress implements DbClass, DbClassAddressForTest {
             populateDefaultBillAddress(rs);
         }
     }
+    
     public static void main(String[] args){
         DbClassAddress dba = new DbClassAddress();
         try {

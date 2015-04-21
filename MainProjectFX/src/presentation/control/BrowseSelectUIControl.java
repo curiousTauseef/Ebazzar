@@ -1,26 +1,20 @@
 package presentation.control;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import launch.Start;
 import presentation.data.BrowseSelectData;
 import presentation.data.CartItemPres;
 import presentation.data.CatalogPres;
 import presentation.data.DataUtil;
-import presentation.data.ErrorMessages;
 import presentation.data.ProductPres;
 import presentation.gui.CatalogListWindow;
-import presentation.gui.DefaultShoppingCartWindow;
 import presentation.gui.OrdersWindow;
 import presentation.gui.ProductDetailsWindow;
 import presentation.gui.ProductListWindow;
@@ -38,8 +32,10 @@ import business.exceptions.BackendException;
 import business.exceptions.BusinessException;
 import business.exceptions.RuleException;
 import business.exceptions.UnauthorizedException;
+import business.externalinterfaces.CustomerProfile;
 import business.externalinterfaces.CustomerSubsystem;
 import business.externalinterfaces.Product;
+import business.externalinterfaces.ShoppingCart;
 import business.externalinterfaces.ShoppingCartSubsystem;
 import business.shoppingcartsubsystem.ShoppingCartSubsystemFacade;
 import business.usecasecontrol.BrowseAndSelectController;
@@ -49,7 +45,7 @@ import business.usecasecontrol.BrowseAndSelectController;
 public enum BrowseSelectUIControl {
 	//Singleton
 	INSTANCE;
-	private static final Logger LOGGER = Logger.getLogger(BrowseSelectUIControl.class.getName());
+	
 	//Windows that this controller manages
 	//difficult to manage CatalogListWindow, so instead
 	//we access CatalogListWindow statically
@@ -60,6 +56,7 @@ public enum BrowseSelectUIControl {
 	private OrdersWindow ordersWindow;
 	private Stage primaryStage;
 	private Callback startScreenCallback;
+	
 	public void setPrimaryStage(Stage ps, Callback callback) {
 		primaryStage = ps;
 		startScreenCallback = callback;
@@ -71,13 +68,11 @@ public enum BrowseSelectUIControl {
 		@Override
 		public void handle(ActionEvent evt) {
 			try {
-				LOGGER.info("Customer > Online Shopping handler called");
 				CatalogListWindow catList = CatalogListWindow.getInstance(primaryStage, 
 					FXCollections.observableList(BrowseSelectData.INSTANCE.getCatalogList()));
 				catList.show();  
 		        primaryStage.hide();
 			} catch(BackendException e) {
-				LOGGER.log(Level.SEVERE, "Database error. Message: " + e.getMessage());
 				startScreenCallback.displayError("Database error. Message: " + e.getMessage());
 				primaryStage.show();
 			}
@@ -145,8 +140,8 @@ public enum BrowseSelectUIControl {
 					CatalogListWindow.getInstance().hide();
 					productListWindow.show();	
 				} catch(BackendException e) {
-					LOGGER.log(Level.SEVERE, "Unable to display list of products" + e);
-					CatalogListWindow.getInstance().displayError("Unable to display list of products: " + e.getMessage());
+					CatalogListWindow.getInstance()
+					  .displayError("Unable to display list of products: " + e.getMessage());
 				}
 			}			
 		}	
@@ -215,13 +210,15 @@ public enum BrowseSelectUIControl {
 	}
 	private class AddToCartHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent evt) {
-			
 			int quant = 1;
 			double unitPrice = 
-			Double.parseDouble(BrowseSelectData.INSTANCE.getSelectedProduct().unitPriceProperty().get());
+				Double.parseDouble(BrowseSelectData.INSTANCE
+					.getSelectedProduct().unitPriceProperty().get());
+			
 			
 			String  name = BrowseSelectData.INSTANCE.getSelectedProduct().nameProperty().get();
-			CartItemPres cartPres = BrowseSelectData.INSTANCE.cartItemPresFromData(name, unitPrice, quant);
+			CartItemPres cartPres = 
+				BrowseSelectData.INSTANCE.cartItemPresFromData(name, unitPrice, quant);
 			BrowseSelectData.INSTANCE.addToCart(cartPres);
 			 
 			shoppingCartWindow = ShoppingCartWindow.INSTANCE;
@@ -259,7 +256,6 @@ public enum BrowseSelectUIControl {
 				window.setTableAccessByRow();
 				window.show();		
 			} catch(BackendException e) {
-				LOGGER.log(Level.SEVERE, "Database unavailable : " + e);
 				shoppingCartWindow.displayError("Database is unavailable. Please try again later.");
 			}
 		}	
@@ -281,7 +277,6 @@ public enum BrowseSelectUIControl {
 				shoppingCartWindow.displayInfo("Cart saved successfully.");
 				shoppingCartWindow.show();
 			} catch (BackendException e) {
-				LOGGER.log(Level.SEVERE,"Failed to save care : " +  e);
 				e.printStackTrace();
 			}
 			

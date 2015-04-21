@@ -17,7 +17,7 @@ import middleware.externalinterfaces.DbConfigKey;
 
 
 class DbClassCreditCard implements DbClass {
-	private static final Logger LOGGER = Logger.getLogger(DbClassCreditCard.class.getPackage().getName());
+	private static final Logger LOG = Logger.getLogger(DbClassCreditCard.class.getPackage().getName());
 	private DataAccessSubsystem dataAccessSS = new DataAccessSubsystemFacade();
     private CustomerProfile custProfile;
     private CreditCard payment;

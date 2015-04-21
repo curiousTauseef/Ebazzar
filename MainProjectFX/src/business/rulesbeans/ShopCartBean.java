@@ -18,7 +18,6 @@ public class ShopCartBean implements DynamicBean {
 		shopCart = sc;
 	}
 	
-	
 	///////bean interface for shopping cart
 	public boolean getIsEmpty() {
 		return shopCart.isEmpty();
