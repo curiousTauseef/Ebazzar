@@ -20,7 +20,6 @@ public enum ManageProductsData {
 	private CatalogPres defaultCatalog = readDefaultCatalogFromDataSource();
 	private CatalogPres readDefaultCatalogFromDataSource() {
 		return readCatalogsFromDataSource().get(0);
-		//return DefaultData.CATALOG_LIST_DATA.get(0);
 	}
 	public CatalogPres getDefaultCatalog() {
 		return defaultCatalog;
@@ -33,25 +32,40 @@ public enum ManageProductsData {
 	public CatalogPres getSelectedCatalog() {
 		return selectedCatalog;
 	}
+	
+//	private CatalogPres theSelectedCatalog = defaultCatalog;
+//	public void setTheSelectedCatalog(CatalogPres selCatalog) {
+//		theSelectedCatalog = selCatalog;
+//	}
+//	public CatalogPres getTheSelectedCatalog() {
+//		return theSelectedCatalog;
+//	}
 	//////////// Products List model
-	private ObservableMap<CatalogPres, List<ProductPres>> productsMap
-	   = readProductsFromDataSource();
+	private ObservableList<ProductPres> productsMap = readProductsFromDataSource();
 	
 	/** Initializes the productsMap */
-	private ObservableMap<CatalogPres, List<ProductPres>> readProductsFromDataSource() {
-		return DefaultData.PRODUCT_LIST_DATA;
-	}
-	
-	/** Delivers the requested products list to the UI */
-	public ObservableList<ProductPres> getProductsList(CatalogPres catPres) {
-		ProductSubsystemFacade db = new ProductSubsystemFacade();
+	private ObservableList<ProductPres> readProductsFromDataSource() {
+		System.out.println("xxxx");
+		ProductSubsystem productSub = new ProductSubsystemFacade();
 		try {
-			List<Product> productList =  db.getProductList(catPres.getCatalog());
-			return FXCollections.observableList(Util.productListToProductPresList(productList));
+			List<Product> products = productSub.getProductList(selectedCatalog.getCatalog());
+			List<ProductPres> productPresList = new ArrayList<ProductPres>();
+			for (int i = 0 ; i <products.size(); i++) {
+				ProductPres orderPres = new ProductPres();
+				orderPres.setProduct(products.get(i));
+				productPresList.add(orderPres);
+			}
+			return FXCollections.observableList(productPresList);
 		} catch (BackendException e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	/** Delivers the requested products list to the UI */
+	public ObservableList<ProductPres> getProductsList(CatalogPres catPres) {		
+		setSelectedCatalog(catPres);
+		return readProductsFromDataSource();
 	}
 	
 	public ProductPres productPresFromData(Catalog c, String name, String date,  //MM/dd/yyyy 
@@ -65,12 +79,20 @@ public enum ManageProductsData {
 	}
 	
 	public void addToProdList(CatalogPres catPres, ProductPres prodPres) {
-		ObservableList<ProductPres> newProducts =
-		           FXCollections.observableArrayList(prodPres);
-		List<ProductPres> specifiedProds = productsMap.get(catPres);
+		
+		ProductSubsystem pSs = new ProductSubsystemFacade();
+		try {
+			pSs.saveNewProduct(catPres.getCatalog().getId(), prodPres.getProduct());
+			
+			ObservableList<ProductPres> newProducts = FXCollections.observableArrayList(prodPres);
+			List<ProductPres> specifiedProds = productsMap;
+			specifiedProds.addAll(newProducts);
+		} catch (BackendException e) {
+			e.printStackTrace();
+		}
 		
 		//Place the new item at the bottom of the list
-		specifiedProds.addAll(newProducts);
+		
 	}
 	
 	/** This method looks for the 0th element of the toBeRemoved list 
@@ -78,9 +100,17 @@ public enum ManageProductsData {
 	 *  is  not supported.
 	 */
 	public boolean removeFromProductList(CatalogPres cat, ObservableList<ProductPres> toBeRemoved) {
+		boolean result = false;
+		ProductPres item = toBeRemoved.get(0);
 		if(toBeRemoved != null && !toBeRemoved.isEmpty()) {
-			boolean result = productsMap.get(cat).remove(toBeRemoved.get(0));
-			return result;
+			ProductSubsystem pSs = new ProductSubsystemFacade();
+			try {
+				pSs.deleteProduct(item.getProduct());
+			} catch (BackendException e) {
+				e.printStackTrace();
+			}
+			return result = productsMap.remove(item);
+
 		}
 		return false;
 	}
@@ -89,9 +119,6 @@ public enum ManageProductsData {
 	private ObservableList<CatalogPres> catalogList = readCatalogsFromDataSource();
 
 	/** Initializes the catalogList */
-	/*private ObservableList<CatalogPres> readCatalogsFromDataSource() {
-		return FXCollections.observableList(DefaultData.CATALOG_LIST_DATA);
-	}*/
 	
 	private ObservableList<CatalogPres> readCatalogsFromDataSource() {
 		ProductSubsystem productSub = new ProductSubsystemFacade();
@@ -123,14 +150,19 @@ public enum ManageProductsData {
 	}
 
 	public void addToCatalogList(CatalogPres catPres) {
-		ObservableList<CatalogPres> newCatalogs = FXCollections
-				.observableArrayList(catPres);
+		ObservableList<CatalogPres> newCatalogs = FXCollections.observableArrayList(catPres);
 
 		// Place the new item at the bottom of the list
 		// catalogList is guaranteed to be non-null
-		boolean result = catalogList.addAll(newCatalogs);
-		if(result) { //must make this catalog accessible in productsMap
-			productsMap.put(catPres, FXCollections.observableList(new ArrayList<ProductPres>()));
+		ProductSubsystem pSs = new ProductSubsystemFacade();
+		try {
+			pSs.saveNewCatalog(catPres.getCatalog());
+			boolean result = catalogList.addAll(newCatalogs);
+			if(result) { //must make this catalog accessible in productsMap
+				productsMap = FXCollections.observableList(new ArrayList<ProductPres>());
+			}
+		} catch (BackendException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -149,6 +181,12 @@ public enum ManageProductsData {
 		boolean result = false;
 		CatalogPres item = toBeRemoved.get(0);
 		if (toBeRemoved != null && !toBeRemoved.isEmpty()) {
+			ProductSubsystem pSs = new ProductSubsystemFacade();
+			try {
+				pSs.deleteCatalog(item.getCatalog());
+			} catch (BackendException e) {
+				e.printStackTrace();
+			}
 			result = catalogList.remove(item);
 		}
 		if(item.equals(selectedCatalog)) {
@@ -169,7 +207,7 @@ public enum ManageProductsData {
 		@SuppressWarnings("rawtypes")
 		@Override
 		public void refresh(ObservableList list) {
-			productsMap.put(selectedCatalog, list);
+			productsMap = list;
 		}
 	}
 	public ManageProductsSynchronizer getManageProductsSynchronizer() {

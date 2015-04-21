@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import business.externalinterfaces.Product;
 import business.externalinterfaces.ProductSubsystem;
 import business.productsubsystem.ProductSubsystemFacade;
 import dbsetup.DbQueries;
@@ -31,6 +32,8 @@ public class ProductSubsystemTest extends TestCase {
 		 */
 		String[] insertResult = DbQueries.insertCatalogRow();
 		String expected = insertResult[2];
+		//System.out.println(expected);
+		
 		
 		ProductSubsystem pss = new ProductSubsystemFacade();
 		try {
@@ -40,7 +43,7 @@ public class ProductSubsystemTest extends TestCase {
 				      .collect(Collectors.toList());
 			boolean valfound = false;
 			for(String catData : found) {
-				
+				System.out.println(catData);
 					if(catData.equals(expected)) valfound = true;
 				
 			}
@@ -53,5 +56,35 @@ public class ProductSubsystemTest extends TestCase {
 		}
 	
 	}
+	
+	
+	public void testGetProductNames() {
+		//setup
+		/*
+		 * Returns a String[] with values:
+		 * 0 - query
+		 * 1 - product id
+		 * 2 - product name
+		 */
+		String[] insertResult = DbQueries.insertProductRow();
+		Integer expected = Integer.parseInt(insertResult[1]);
+		
+		ProductSubsystem pss = new ProductSubsystemFacade();
+		try {
+			Integer insertedProductId = pss.getProductFromId(expected).getProductId();
+			boolean found = false;
+			if(insertedProductId!=null){
+				found = true;
+			}
+			assertTrue(found);
+			
+		} catch(Exception e) {
+			fail("Inserted product not found");
+		} finally {
+			DbQueries.deleteProductRow(expected);
+		}
+	
+	}
+	
 	
 }
