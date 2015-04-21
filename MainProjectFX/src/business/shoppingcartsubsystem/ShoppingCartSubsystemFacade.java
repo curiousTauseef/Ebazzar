@@ -11,6 +11,7 @@ import business.externalinterfaces.Address;
 import business.externalinterfaces.CartItem;
 import business.externalinterfaces.CreditCard;
 import business.externalinterfaces.CustomerProfile;
+import business.externalinterfaces.DbClassShoppingCartForTest;
 import business.externalinterfaces.ShoppingCart;
 import business.externalinterfaces.ShoppingCartSubsystem;
 
@@ -115,6 +116,11 @@ public enum ShoppingCartSubsystemFacade implements ShoppingCartSubsystem {
 
         }
 		
+	}
+
+	@Override
+	public DbClassShoppingCartForTest getGenericDbClassShoppingCart() {
+		return new DbClassShoppingCart();
 	}
 
 }

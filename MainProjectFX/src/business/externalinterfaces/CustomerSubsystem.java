@@ -127,5 +127,5 @@ public interface CustomerSubsystem {
     //TESTING
     public DbClassAddressForTest getGenericDbClassAddress(); 
     public CustomerProfile getGenericCustomerProfile();
-    public DbClassCustomerProfileTest getGenericDbClassCustomerProfile();
+    public DbClassCustomerProfileForTest getGenericDbClassCustomerProfile();
 }

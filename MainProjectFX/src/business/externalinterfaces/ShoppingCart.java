@@ -14,4 +14,6 @@ public interface ShoppingCart {
     boolean isEmpty();
 
     //setters for testing
+    String getTotalAmountCharged();
+    String getCartId();
 }

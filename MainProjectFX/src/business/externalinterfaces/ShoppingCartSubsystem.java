@@ -92,4 +92,6 @@ public interface ShoppingCartSubsystem {
 //       *  will be checked against quantity requested)
 //       */
 //   public void runFinalOrderRules() throws RuleException, BusinessException;
+	//Testing
+	public DbClassShoppingCartForTest getGenericDbClassShoppingCart();
 }
