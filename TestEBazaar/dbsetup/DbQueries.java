@@ -389,4 +389,51 @@ public class DbQueries {
 	public static String readCatalogsSql() {
 		return "SELECT * FROM CatalogType";
 	}
+	public static String[] insertCartRow(Integer customerId, double totalamountcharged) {
+        String[] vals = saveCartSql(customerId, totalamountcharged);
+        String query = vals[0];
+        try {
+            stmt = acctCon.createStatement();
+            stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                vals[1] = rs.getString(1);
+            }
+            stmt.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return vals;
+    }
+
+	public static String[] saveCartSql(Integer customerId,
+			double totalamountcharged) {
+		String[] vals = new String[5];
+		vals[0] = "INSERT into shopcarttbl(shopcartid,custid,totalpriceamount,totalamountcharged) "
+				+ "VALUES(NULL,"
+				+ customerId
+				+ ","
+				+ totalamountcharged
+				+ ","
+				+ totalamountcharged + ")";
+		vals[2] = customerId.toString();
+		vals[3] = Double.toString(totalamountcharged);
+		vals[4] = Double.toString(totalamountcharged);
+		return vals;
+	}
+
+	public static void deleteCartRow(String cartId) {
+		try {
+			stmt = acctCon.createStatement();
+			stmt.executeUpdate(deleteCartSql(cartId));
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static String deleteCartSql(String cartId) {
+		return "DELETE FROM shopcarttbl WHERE shopcartid = " + cartId;
+	}
 }
