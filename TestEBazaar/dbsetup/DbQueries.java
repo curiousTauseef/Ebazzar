@@ -167,6 +167,31 @@ public class DbQueries {
 	/**
 	 * Returns a String[] with values:
 	 * 0 - query
+	 * 1 - address id
+	 * 2 - address
+	 */
+	public static String[] insertAddressRow() {
+		String[] vals = saveAddressSql();
+		String query = vals[0];
+		try {
+			stmt = acctCon.createStatement();
+			stmt.executeUpdate(query,Statement.RETURN_GENERATED_KEYS);
+			ResultSet rs = stmt.getGeneratedKeys();
+			if(rs.next()) {
+				vals[1] = (rs.getString(2));
+			}
+			stmt.close();
+			
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return vals;
+	}
+	
+	/**
+	 * Returns a String[] with values:
+	 * 0 - query
 	 * 1 - customer id
 	 * 2 - cust fname
 	 * 3 - cust lname
@@ -193,6 +218,16 @@ public class DbQueries {
 		try {
 			stmt = prodCon.createStatement();
 			stmt.executeUpdate(deleteCatalogSql(catId));
+			stmt.close();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void deleteAddressRow(String street) {
+		try {
+			stmt = acctCon.createStatement();
+			stmt.executeUpdate(deleteAddressSql(street));
 			stmt.close();
 		}
 		catch(SQLException e) {
@@ -237,6 +272,16 @@ public class DbQueries {
 		return "SELECT * from altaddress WHERE custid = 1";
 	}
 	
+	
+	public static String[] saveAddressSql() {
+		String[] vals = new String[3];
+		
+		String name = "testaddress";
+		vals[0] = "INSERT into altaddress (addressid,custid,street,city,state,zip) VALUES(NULL,1,'xxx','yyy','zzz','1232')";  
+		vals[1] = "xxx";
+		vals[2] = name;
+		return vals;
+	}
 	public static String[] saveCatalogSql() {
 		String[] vals = new String[3];
 		
@@ -289,6 +334,9 @@ public class DbQueries {
 	}
 	public static String deleteProductSql(Integer prodId) {
 		return "DELETE FROM Product WHERE productid = "+prodId;
+	}
+	public static String deleteAddressSql(String streetAd) {
+		return "DELETE FROM AltAddress WHERE street = '"+streetAd+"'";
 	}
 	public static String deleteCatalogSql(Integer catId) {
 		return "DELETE FROM CatalogType WHERE catalogid = "+catId;
@@ -550,4 +598,5 @@ public class DbQueries {
 	public static String readCartItemsQuery(String cartId){
 		return "SELECT * FROM ShopCartItem WHERE shopcartid="+cartId;
 	}
+
 }
