@@ -11,18 +11,12 @@ import java.util.List;
 import middleware.DbConfigProperties;
 import middleware.externalinterfaces.DbConfigKey;
 import alltests.AllTests;
-import business.customersubsystem.AddressImpl;
 import business.customersubsystem.CustomerSubsystemFacade;
 import business.externalinterfaces.Address;
-import business.externalinterfaces.CartItem;
 import business.externalinterfaces.Catalog;
-import business.externalinterfaces.CreditCard;
 import business.externalinterfaces.Order;
-import business.externalinterfaces.ShoppingCart;
 import business.ordersubsystem.OrderSubsystemFacade;
 import business.productsubsystem.ProductSubsystemFacade;
-import business.shoppingcartsubsystem.CartItemImpl;
-import business.shoppingcartsubsystem.ShoppingCartSubsystemFacade;
 public class DbQueries {
 	static {
 		AllTests.initializeProperties();
@@ -167,6 +161,31 @@ public class DbQueries {
 	/**
 	 * Returns a String[] with values:
 	 * 0 - query
+	 * 1 - address id
+	 * 2 - address
+	 */
+	public static String[] insertAddressRow() {
+		String[] vals = saveAddressSql();
+		String query = vals[0];
+		try {
+			stmt = acctCon.createStatement();
+			stmt.executeUpdate(query,Statement.RETURN_GENERATED_KEYS);
+			ResultSet rs = stmt.getGeneratedKeys();
+			if(rs.next()) {
+				vals[1] = (rs.getString(2));
+			}
+			stmt.close();
+			
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return vals;
+	}
+	
+	/**
+	 * Returns a String[] with values:
+	 * 0 - query
 	 * 1 - customer id
 	 * 2 - cust fname
 	 * 3 - cust lname
@@ -193,6 +212,16 @@ public class DbQueries {
 		try {
 			stmt = prodCon.createStatement();
 			stmt.executeUpdate(deleteCatalogSql(catId));
+			stmt.close();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void deleteAddressRow(String street) {
+		try {
+			stmt = acctCon.createStatement();
+			stmt.executeUpdate(deleteAddressSql(street));
 			stmt.close();
 		}
 		catch(SQLException e) {
@@ -237,6 +266,16 @@ public class DbQueries {
 		return "SELECT * from altaddress WHERE custid = 1";
 	}
 	
+	
+	public static String[] saveAddressSql() {
+		String[] vals = new String[3];
+		
+		String name = "testaddress";
+		vals[0] = "INSERT into altaddress (addressid,custid,street,city,state,zip) VALUES(NULL,1,'xxx','yyy','zzz','1232')";  
+		vals[1] = "xxx";
+		vals[2] = name;
+		return vals;
+	}
 	public static String[] saveCatalogSql() {
 		String[] vals = new String[3];
 		
@@ -289,6 +328,9 @@ public class DbQueries {
 	}
 	public static String deleteProductSql(Integer prodId) {
 		return "DELETE FROM Product WHERE productid = "+prodId;
+	}
+	public static String deleteAddressSql(String streetAd) {
+		return "DELETE FROM AltAddress WHERE street = '"+streetAd+"'";
 	}
 	public static String deleteCatalogSql(Integer catId) {
 		return "DELETE FROM CatalogType WHERE catalogid = "+catId;
@@ -441,113 +483,5 @@ public class DbQueries {
 
 	public static String deleteCartSql(String cartId) {
 		return "DELETE FROM shopcarttbl WHERE shopcartid = " + cartId;
-	}
-	
-	public static Address[] readDefaultShippingBilling() {
-		String query = readDefaultShippingBillingQuery();
-		Address[] addresses = new AddressImpl[2];
-		
-		try {
-			stmt = acctCon.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			
-			while(rs.next()){
-				  String shipaddress1 = rs.getString("shipaddress1");
-                  //String shipaddress2 = rs.getString("shipaddress2");
-                  String shipcity = rs.getString("shipcity");
-                  String shipstate = rs.getString("shipstate");
-                  String shipzipcode = rs.getString("shipzipcode");
-                  Address shipAddress = CustomerSubsystemFacade.createAddress(shipaddress1, shipcity, shipstate, shipzipcode, true, false);
-                  		
-                  String billaddress1 = rs.getString("billaddress1");
-                  //String billaddress2 = rs.getString("billaddress2");
-                  String billcity = rs.getString("billcity");
-                  String billstate = rs.getString("billstate");
-                  String billzipcode = rs.getString("billzipcode");
-                  Address billAddress = CustomerSubsystemFacade.createAddress(billaddress1, billcity, billstate, billzipcode, false, true);
-                  
-                  addresses[0] = shipAddress;
-                  addresses[1]=billAddress;
-			}
-			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return addresses;
-	}
-	
-	public static String readDefaultShippingBillingQuery(){
-		return "SELECT * FROM Customer WHERE custid =1";
-	}
-	
-	public static ShoppingCart readSavedCart() {
-		String query = readShoppingCartSql();
-		ShoppingCart shoppingCart= ShoppingCartSubsystemFacade.INSTANCE.getEmptyCartForTest();
-		try {
-			stmt = acctCon.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-                while(rs.next()) {
-                	String shopcartid = rs.getString("shopcartid");
-                	
-                    String shipaddress1 = rs.getString("shipaddress1");
-                    //String shipaddress2 = rs.getString("shipaddress2");
-                    String shipcity = rs.getString("shipcity");
-                    String shipstate = rs.getString("shipstate");
-                    String shipzipcode = rs.getString("shipzipcode");
-                    Address shipAddress = CustomerSubsystemFacade.createAddress(shipaddress1, shipcity, shipstate, shipzipcode, true, false);
-                    		
-                    String billaddress1 = rs.getString("billaddress1");
-                    //String billaddress2 = rs.getString("billaddress2");
-                    String billcity = rs.getString("billcity");
-                    String billstate = rs.getString("billstate");
-                    String billzipcode = rs.getString("billzipcode");
-                    Address billAddress = CustomerSubsystemFacade.createAddress(billaddress1, billcity, billstate, billzipcode, false, true);
-                    
-                    String nameoncard = rs.getString("nameoncard");
-                    String expdate = rs.getString("expdate");
-                    String cardtype = rs.getString("cardtype");
-                    String cardnum = rs.getString("cardnum");
-                    CreditCard creditCard = CustomerSubsystemFacade.createCreditCard(nameoncard, expdate, cardnum, cardtype);
-                    
-                    shoppingCart.setBillAddress(billAddress);
-                    shoppingCart.setShipAddress(shipAddress);
-                    shoppingCart.setPaymentInfo(creditCard);
-                    shoppingCart.setCartItems(getCartItems(shopcartid));
-                }  
-                stmt.close();
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-			
-		}
-		return shoppingCart;
-	}
-	
-	public static String readShoppingCartSql(){
-		return "SELECT * FROM ShopCartTbl WHERE custid =1";
-	}
-	
-	private static List<CartItem> getCartItems(String shopcartid){
-		String query = readCartItemsQuery(shopcartid);
-		List<CartItem> cartItems = new LinkedList<CartItem>();
-		
-		try {
-			stmt = acctCon.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			
-			while(rs.next()){
-				
-				CartItem item = new CartItemImpl();
-				cartItems.add(item);
-			}
-			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return cartItems;
-	}
-	
-	public static String readCartItemsQuery(String cartId){
-		return "SELECT * FROM ShopCartItem WHERE shopcartid="+cartId;
 	}
 }
