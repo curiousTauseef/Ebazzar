@@ -1,7 +1,5 @@
 package subsystemtests;
 
-import integrationtests.CheckoutTest;
-
 import java.util.logging.Logger;
 
 import dbsetup.DbQueries;
@@ -17,7 +15,7 @@ import junit.framework.TestCase;
 
 public class ShoppingCartSubsystemTest extends TestCase {
 	static String name = "ShoppingCart Subsystem Test";
-	static Logger log = Logger.getLogger(CheckoutTest.class.getName());
+	static Logger log = Logger.getLogger(ShoppingCartSubsystem.class.getName());
 	
 	static{
 		AllTests.initializeProperties();

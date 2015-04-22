@@ -125,7 +125,7 @@ public enum ShoppingCartSubsystemFacade implements ShoppingCartSubsystem {
         }
 	}
 
-	//DatTX
+	
 	@Override
 	public ShoppingCart getFullInfoLiveCart() {
         CustomerSubsystem custSubsystem = new CustomerSubsystemFacade();

@@ -23,6 +23,7 @@ import business.externalinterfaces.RulesConfigProperties;
 import business.externalinterfaces.ShoppingCart;
 import business.externalinterfaces.ShoppingCartSubsystem;
 import business.rulesbeans.FinalOrderBean;
+import business.rulesbeans.ShopCartBean;
 
 public enum CheckoutController  {
 	INSTANCE;
@@ -31,8 +32,34 @@ public enum CheckoutController  {
 			.getPackage().getName());
 	
 	
-	public void runShoppingCartRules() throws RuleException, BusinessException {
+	public void runShoppingCartRules(ShoppingCartSubsystem scss) throws RuleException, BusinessException {
 		//implement
+		ShoppingCart cart = scss.getLiveCart();
+		try {
+			// set up
+			RulesConfigProperties props = new RulesConfigProperties();
+			String moduleName = props.getProperty(RulesConfigKey.SHOPCART_MODULE.getVal());
+			BufferedReader rulesReader = Util.pathToRules(getClass().getClassLoader(), props.getProperty(RulesConfigKey.SHOPCART_RULES_FILE.getVal()));
+
+			String deftemplateName = props.getProperty(RulesConfigKey.SHOPCART_DEFTEMPLATE.getVal());
+			ShopCartBean shopCartBean = new ShopCartBean(cart);
+			HashMap h = new HashMap();
+			h.put(deftemplateName, shopCartBean);
+
+			// start up the rules engine
+			ReteWrapper engine = new ReteWrapper();
+			engine.setRulesAsString(rulesReader);
+			engine.setCurrentModule(moduleName);
+			engine.setTable(h);
+			engine.runRules();
+			
+		} catch (IOException ex) {
+			throw new RuleException(ex.getMessage());
+		} catch (OperatingException ex) {
+			throw new RuleException(ex.getMessage());
+		} catch (Exception ex) {
+			throw new RuleException(ex.getMessage());
+		}
 		
 	}
 	
