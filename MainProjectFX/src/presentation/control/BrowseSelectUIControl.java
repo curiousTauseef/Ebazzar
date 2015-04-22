@@ -43,6 +43,7 @@ import business.externalinterfaces.Product;
 import business.externalinterfaces.ShoppingCartSubsystem;
 import business.shoppingcartsubsystem.ShoppingCartSubsystemFacade;
 import business.usecasecontrol.BrowseAndSelectController;
+import business.usecasecontrol.CheckoutController;
 
 
 
@@ -271,20 +272,38 @@ public enum BrowseSelectUIControl {
 		
 		@Override
 		public void handle(ActionEvent evt) {
-			//shoppingCartWindow.displayInfo("You need to implement this handler.");
-			SessionCache cache = SessionCache.getInstance();
-			CustomerSubsystem customerSub = (CustomerSubsystem) cache.get(BusinessConstants.CUSTOMER);
-			ShoppingCartSubsystem sc = ShoppingCartSubsystemFacade.INSTANCE;
-			sc.setCustomerProfile(customerSub.getCustomerProfile());
-			try {
-				sc.saveLiveCart();
-				shoppingCartWindow.displayInfo("Cart saved successfully.");
-				shoppingCartWindow.show();
-			} catch (BackendException e) {
-				LOGGER.log(Level.SEVERE,"Failed to save care : " +  e);
-				e.printStackTrace();
+			boolean rulesOk = true;
+			/* check that cart is not empty before going to next screen */
+
+			 try {
+				 CheckoutController.INSTANCE.runShoppingCartRules(ShoppingCartSubsystemFacade.INSTANCE);
+			 } catch (RuleException e) {
+			 //handle
+				 rulesOk = false;
+				 ShoppingCartWindow.INSTANCE.show();
+				 ShoppingCartWindow.INSTANCE.displayError(e.getMessage());
+			 } catch (BusinessException e) {
+			 //handle
+				 rulesOk = false;
+				 ShoppingCartWindow.INSTANCE.show();
+				 ShoppingCartWindow.INSTANCE.displayError(e.getMessage());
+			 }
+
+			if (rulesOk) {
+				//shoppingCartWindow.displayInfo("You need to implement this handler.");
+				SessionCache cache = SessionCache.getInstance();
+				CustomerSubsystem customerSub = (CustomerSubsystem) cache.get(BusinessConstants.CUSTOMER);
+				ShoppingCartSubsystem sc = ShoppingCartSubsystemFacade.INSTANCE;
+				sc.setCustomerProfile(customerSub.getCustomerProfile());
+				try {
+					sc.saveLiveCart();
+					shoppingCartWindow.displayInfo("Cart saved successfully.");
+					shoppingCartWindow.show();
+				} catch (BackendException e) {
+					LOGGER.log(Level.SEVERE,"Failed to save care : " +  e);
+					e.printStackTrace();
+				}
 			}
-			
 		}	
 	}
 	public SaveCartHandler getSaveCartHandler() {
